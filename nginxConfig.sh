@@ -132,7 +132,7 @@ case  $app  in
     web) configWeb ;;
     domain) domainConfig;;
     ending) finalissues ;;
-    *) echo 'Unable to install [ '$app' ]. Attempt: sudo apt-get install '$app;;
+    *) echo 'Unable to install [ '$app' ]. Attempt: apt-get install '$app;;
 esac
 done
 echo -e "\nAll done! "
