@@ -34,7 +34,7 @@ apt-get -y update
 function installFirewall(){
 echo "#  ----------------------------------"
 echo 'Install && config Firewall ... '
-[[ $(dpkg --get-selections ufw) ]] && { echo "Already installed";  exit 1;}
+[[ $(dpkg --get-selections ufw) ]] && { echo "Already installed";  return 1;}
 apt-get install -y ufw
 ufw enable
 ufw default deny incoming
@@ -51,7 +51,7 @@ return 1
 function installGit(){
 echo "#  ----------------------------------"
 echo 'Install git ... '
-[[ $(dpkg --get-selections git) ]] && { echo "Already installed";  exit 1;}
+[[ $(dpkg --get-selections git) ]] && { echo "Already installed";  return 1;}
 apt-get install git
 return 1
 }
@@ -60,7 +60,7 @@ return 1
 function installDocker(){
 echo "#  ----------------------------------"
 echo 'Install docker ... '
-[[ $(dpkg --get-selections docker-ce) ]] && { echo "Already installed";  exit 1;}
+[[ $(dpkg --get-selections docker-ce) ]] && { echo "Already installed";  return 1;}
 apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
