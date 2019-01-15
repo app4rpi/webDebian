@@ -12,7 +12,7 @@ RELEASE=$(lsb_release -cs)
 function updateSystem(){
 cat /etc/issue
 echo "#  ----------------------------------"
-echo 'Update & Upgrade system; '
+echo 'Update system: '${RELEASE}
 file='/etc/apt/sources.list'
 echo -e 'File to update : '$file
 [[ -f $file && ! -f $file.old ]] && mv $file $file.old
@@ -33,7 +33,7 @@ apt-get -y update
 #  ----------------------------------
 function installFirewall(){
 echo "#  ----------------------------------"
-echo 'Install && config Firewall ... '
+echo 'Install && config ufw Firewall ... '
 [[ $(dpkg --get-selections ufw) ]] && { echo "Already installed";  return 1;}
 apt-get install -y ufw
 ufw enable
