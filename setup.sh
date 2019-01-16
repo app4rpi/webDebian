@@ -51,8 +51,7 @@ return 1
 function installGit(){
 echo "#  ----------------------------------"
 echo 'Install git ... '
-[[ $(dpkg --get-selections git) ]] && { echo "Already installed";  return 1;}
-apt-get install git
+[[ $(dpkg --get-selections git) ]] && echo "Git Already installed" || apt-get install -y git
 return 1
 }
 
