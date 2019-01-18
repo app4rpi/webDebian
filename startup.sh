@@ -58,6 +58,7 @@ function configContext(){
 echo -en '<context.sh> config ... '
 file='context.sh'
 [[ ! -f ${file} ]] && { echo "Error: Required file "${file}" not exist!"; exit; }
+[[ -f $file && ! -f "${file%.sh}".old ]] && cp "${file}" "${file%.sh}".old
 verifiedContext=$(sed -e '/^export verifiedContext/ !d' $file)
 verifiedContext=( ${verifiedContext:23} )
 [[ ${verifiedContext} = true ]] && echo "Data already validated" || echo "Data to be validated"
