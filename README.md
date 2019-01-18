@@ -1,4 +1,4 @@
 # webDocker
 
 
-wget https://raw.githubusercontent.com/app2linux/webDebian/master/setup.sh
+wget https://raw.githubusercontent.com/app2linux/webDebian/master/start.sh
