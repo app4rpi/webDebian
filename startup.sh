@@ -91,7 +91,7 @@ sed -ie "s/^export mainIP.*$/${temp2}/g" $file
 sed -ie "s/^export mainColor.*$/${temp3}/g" $file
 for ((i=0; i<${#SUBDOMAINS[@]}; i++))
 	do
-	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[1]}"'/}' $file
+	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[i]}"'/}' $file
 	done
 sed -ie "s/^export verifiedContext.*$/export verifiedContext=true/g" $file
 echo "Saved data"
