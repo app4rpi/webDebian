@@ -50,6 +50,15 @@ echo -n 'Main domain: '
 [[ -z "$MAINDOMAIN" ]] && SUBDOMAINS="" || SUBDOMAINS=${lineOrder[@]//$MAINDOMAIN/}
 echo -en 'Subdomains: ' 
 [[ -z "$SUBDOMAINS" ]] && echo -e "<none>" || { SUBDOMAINS="${SUBDOMAINS} "; echo -e ${SUBDOMAINS// /.$MAINDOMAIN }; } 
+echo -en "Error page style [error.css]: "
+if [[ ${lineOrder[@]} = *"errorlocal"* ]]; then
+	echo "Configurable style for each domain in the local directory './css"
+	lineOrder=( ${lineOrder[@]//'errorlocal'/} )
+	ERRORLOCAL=true
+	else
+	echo "Unique style for all domains and subdomains in '/errors' directory"
+	ERRORLOCAL=false
+fi
 echo -e '# '$LINE$LINE
 return 1
 }
@@ -95,6 +104,7 @@ for ((i=0; i<${#SUBDOMAINS[@]}; i++))
 	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[i]}"'/}' $file
 	done
 sed -ie "s/^export verifiedContext.*$/export verifiedContext=true/g" $file
+sed -ie "s/^errorStyleLocal.*$/export errorStyleLocal=${ERRORLOCAL}/g" $file
 echo "Saved data"
 return 1
 }
@@ -102,6 +112,7 @@ return 1
 MAINIP4=''
 MAINDOMAIN=""
 SUBDOMAINS=""
+ERRORLOCAL=false
 clear
 initialissues
 configContext
