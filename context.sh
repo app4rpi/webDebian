@@ -29,7 +29,7 @@ echo "# ------------------------------------------------------------------------
 echo "# Data order [ domain : IP : workDir nameSite colorSite subDirIn ]"
 echo "# --------------------------------------------------------------------------"
 export context=("(domain IP workDir nameSite colorSite subDirIn)"
-"("${mainDomain}" "${mainIP}" html mainSite "${mainColor}")"
+"('' '' html mainSite "${mainColor}")"
 "()"
 "()"
 "()"
