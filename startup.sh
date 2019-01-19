@@ -4,7 +4,7 @@
 # chmod +x ./startup.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-LINE="---------------------------------------------"
+LINE="-----------------------------------------------"
 lineOrder=( "${@,,}" )
 #  ----------------------------------
 function isCorrect(){
@@ -26,7 +26,7 @@ return 1
 function initialissues(){
 echo -e "#\nStart install & config server."
 echo -e '# '$LINE$LINE
-[[ ${#lineOrder[@]} -eq 0 ]] && echo -e 'Line orders usage & options:\n   ./start.sh [NOIP] <nameMainDomain>.<extension> <subdomain> <subdomain> <...>\n# '$LINE$LINE
+[[ ${#lineOrder[@]} -eq 0 ]] && echo -e 'Line orders usage & options:\n   ./start.sh [NOIP] [ERRORLOCAL] <nameMainDomain>.<extension> <subdomain> <subdomain> <...>\n# '$LINE$LINE
 echo -en '  Initials issues: · Line orders info: '
 [[ -z "${lineOrder[@]}" ]] && echo -e "<none>" || echo -e ${lineOrder[@]}
 echo -e '# '$LINE$LINE
@@ -52,7 +52,7 @@ echo -en 'Subdomains: '
 [[ -z "$SUBDOMAINS" ]] && echo -e "<none>" || { SUBDOMAINS="${SUBDOMAINS} "; echo -e ${SUBDOMAINS// /.$MAINDOMAIN }; } 
 echo -en "Error page style [error.css]: "
 if [[ ${lineOrder[@]} = *"errorlocal"* ]]; then
-	echo "Configurable style for each domain in the local directory './css"
+	echo "Configurable style for each domain in the local directory './css'"
 	lineOrder=( ${lineOrder[@]//'errorlocal'/} )
 	ERRORLOCAL=true
 	else
@@ -78,7 +78,8 @@ echo $temp2
 colors=$(sed -e '/color=/ !d' $file)
 colors=( ${colors:7:-1} )
 random=$(date +%4N)
-temp3='export mainColor="'${colors[${random:3}]}'"'
+MAINCOLOR=${colors[${random:3}]}
+temp3="export mainColor="$MAINCOLOR
 echo $temp3
 #
 echo "# SubDomains data>"
@@ -87,7 +88,7 @@ declare -a  SUBDOMAINS
 for ((i=0; i<${#tempSub[@]}; i++))
 	do
 	random=$(date +%4N)
-	temp='"('${tempSub[i]}.$MAINDOMAIN' "'$MAINIP4'" '${tempSub[i]}' '${tempSub[i]}Site' "'${colors[${random:3}]}'" 'mainSite')"'
+	temp='"('${tempSub[i]}.$MAINDOMAIN" '"$MAINIP4"' "${tempSub[i]}" "${tempSub[i]}Site" "${colors[${random:3}]}" "mainSite')"'
 	SUBDOMAINS+=("$temp") 
 	echo $temp
 	done
@@ -99,6 +100,9 @@ isCorrect
 sed -ie "s/^export mainDomain.*$/${temp1}/g" $file
 sed -ie "s/^export mainIP.*$/${temp2}/g" $file
 sed -ie "s/^export mainColor.*$/${temp3}/g" $file
+[[ -n "$MAINDOMAIN" ]] && sed -ie "s/(''/($MAINDOMAIN/g" $file
+[[ -n "$MAINIP4" ]] && sed -ie "s/'' html/'$MAINIP4' html/g" $file
+sed -ie "s/'')/'$MAINCOLOR')/g" $file
 for ((i=0; i<${#SUBDOMAINS[@]}; i++))
 	do
 	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[i]}"'/}' $file
@@ -118,3 +122,4 @@ initialissues
 configContext
 finalissues
 exit
+
