@@ -52,5 +52,5 @@ do
 echo
 done
 export verifiedContext=false
+export folderCreated=false
 echo "# --------------------------------------------------------------------------"
-
