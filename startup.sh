@@ -102,7 +102,7 @@ sed -ie "s/^export mainIP.*$/${temp2}/g" $file
 sed -ie "s/^export mainColor.*$/${temp3}/g" $file
 [[ -n "$MAINDOMAIN" ]] && sed -ie "s/(''/($MAINDOMAIN/g" $file
 [[ -n "$MAINIP4" ]] && sed -ie "s/'' html/'$MAINIP4' html/g" $file
-sed -ie "s/'')/'$MAINCOLOR')/g" $file
+sed -ie "s/'')/$MAINCOLOR)/g" $file
 for ((i=0; i<${#SUBDOMAINS[@]}; i++))
 	do
 	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[i]}"'/}' $file
