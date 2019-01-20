@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script has been tested on Debian 8 Jessie image
 #
-# chmod +x ./setup.sh
+# chmod +x ./setupServer.sh
 #
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 echo -e "Start install & config server."
