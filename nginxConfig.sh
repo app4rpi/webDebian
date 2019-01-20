@@ -2,22 +2,27 @@
 # This script has been tested on Debian 8 Jessie image
 #
 # chmod +x ./nginxConfig.sh
-#
+#  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-echo -e "Start install & config server."
-ifconfig eth0 | grep inet | awk '{ print $2 }'
-#
+echo -e "#\n# Nginx files & folders create\n#"
 #  ---------------------------------------------------------
 source ./context.sh
 #  ---------------------------------------------------------
-function updateSystem(){
-cat /etc/issue
-echo "----------------------------"
-echo 'Config ...'
+function initialissues(){
+echo "#\n----------------------------"
+echo 'Initial issues ...'
+[[ ! -d $${wwwFolder} ]] && mkdir -p ${wwwFolder}
+}
+#  ----------------------------------
+function includeFolder(){
+echo 'Create include folder ... '
+[[ ! -d $${wwwFolder}/include ]] && mkdir -p 
+wget https://code.jquery.com/jquery-3.3.1.min.js -P ${wwwFolder}/include/jquery.min.js
+#
 }
 #  ----------------------------------
 function errorFiles(){
-echo 'Create error files ... '
+echo -n 'Create error files ... '
 #
 errorNum=(4xx 5xx 400 401 403 404 405 408)
 errorId=('Client error' 'Server error' 'Bad Request' 'Unauthorized' 'Forbidden' 'Not Found' 'Method Not Allowed' 'Request Timeout')
@@ -41,10 +46,12 @@ errorTextCat=("El codi d'error 4xx sol indicar casos en qu&egrave; el client sem
 "El m&egrave;tode de la petici&oacute; &eacute;s conegut pel servidor però no est&agrave; activa i no es pot utilitzar." 
 "El servidor no pot trobar el recurs sol·licitat.")
 [[ ! -d ${errorDir} ]] && mkdir -p ${errorDir}
+echo -n '['${errorDir}'/] :'
+[[ ${errorStyleLocal} = true ]] && errorCss='css' || errorCss='/errors'
 for ((i=0; i<${#errorNum[@]}; i++))
 do
 mainPage='<!DOCTYPE html>\n<html lang="es-ES">\n<head>\n<meta charset="utf-8" />\n
-<title>Error '${errorNum[i]}'</title>\n<link type="text/css" rel="stylesheet" href="/errors/style.css" /></head>'
+<title>Error '${errorNum[i]}'</title>\n<link type="text/css" rel="stylesheet" href="'${errorCss}'/error.css" /></head>'
 mainPage+='<body>\n<article><div id="one"><div id="dia" class="number">'${errorNum[i]}'</div>\n
 <div id="mes">'${errorId[i]}'</div></div><div id="dos">'
 mainPage+="<h3>"${errorTitleAng[i]}"</h3><p>"${errorTextAng[i]}"</p>\n
@@ -55,20 +62,58 @@ mainPage+="<h3>"${errorTitleCat[i]}"</h3><p>"${errorTextCat[i]}"</p>\n
     <p>Si l'error persisteix, no dubteu en posar-vos en <a href='mailto:webmaster@"${mainDomain}"'>contacte amb nosaltres</a>.</p></div>"
 mainPage+="</article></body></html>"
 echo -e $mainPage >  ${errorDir}/${errorNum[i]}.html
+echo -n ' '${errorNum[i]}.html
 done
-echo '------------------------------------------------------------------------'
-cat <<'EOF' > ${errorDir}/style.css
-body {background: #5F4B8B;color: #aaa; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; overflow:hidden}
-#one { position: absolute; left: 0px; width: 396px; font-size: 36px; padding-top: 16px; border-right: 1px solid #ffffff; text-align: center; }
-#dos { position: relative; left: 439px;  font-size: 16px;padding-top: 8px; width: 696px;  }
-#dos p {line-height: 4px;}
-#dos h3 {padding: 16px 0  0 0;margin:0;}
-#mes {  font-size: 56px; }
-.number { font-size: 196px; line-height: 169px; }
-article {position: fixed; top: 50%; left: 35%; transform: translate(-50%, -50%);}
-object { width: 696px; }
-p a, p a:visited {color: #aaa;}
-EOF
+mainCSS='body {background: '
+mainCSS+=${mainColor}
+mainCSS+=';color: #aaa; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; overflow:hidden}'
+mainCSS+="\n#one { position: absolute; left: 0px; width: 396px; font-size: 36px; padding-top: 16px; border-right: 1px solid #ffffff; text-align: center; }"
+mainCSS+='\n#dos { position: relative; left: 439px;  font-size: 16px;padding-top: 8px; width: 696px;  }'
+mainCSS+='\n#dos p {line-height: 4px;}'
+mainCSS+='\n#dos h3 {padding: 16px 0  0 0;margin:0;}'
+mainCSS+='\n#mes {  font-size: 56px; }'
+mainCSS+='\n.number { font-size: 196px; line-height: 169px; }'
+mainCSS+="\narticle {position: fixed; top: 50%; left: 35%; transform: translate(-50%, -50%);}"
+mainCSS+='\nobject { width: 696px; }'
+mainCSS+='\np a, p a:visited {color: #aaa;}'
+
+data=(${context[1]:1:-1})
+echo
+echo -n 'Create <error.css> file in ...  '${errorDir}
+
+errorCSS ${errorDir} ${data[4]}
+
+
+
+if [[ $errorStyleLocal = true ]]; then
+echo -n '  ['${wwwFolder}/'/] :'
+for ((i=1; i<${#context[@]}; i++))
+do
+data=(${context[i]:1:-1})
+[[ -z $data ]] && break
+block=(${block:1:-1})
+errorCSS ${wwwFolder}/${data[2]}/css ${data[4]}
+echo -n ' '${data[2]}'/css'
+done
+fi
+echo
+return
+}
+#  ----------------------------------
+function errorCSS(){
+mainCSS='body {background: '
+mainCSS+=$2
+mainCSS+=';color: #aaa; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; overflow:hidden}'
+mainCSS+="\n#one { position: absolute; left: 0px; width: 396px; font-size: 36px; padding-top: 16px; border-right: 1px solid #ffffff; text-align: center; }"
+mainCSS+='\n#dos { position: relative; left: 439px;  font-size: 16px;padding-top: 8px; width: 696px;  }'
+mainCSS+='\n#dos p {line-height: 4px;}'
+mainCSS+='\n#dos h3 {padding: 16px 0  0 0;margin:0;}'
+mainCSS+='\n#mes {  font-size: 56px; }'
+mainCSS+='\n.number { font-size: 196px; line-height: 169px; }'
+mainCSS+="\narticle {position: fixed; top: 50%; left: 35%; transform: translate(-50%, -50%);}"
+mainCSS+='\nobject { width: 696px; }'
+mainCSS+='\np a, p a:visited {color: #aaa;}'
+echo -e $mainCSS > $1/error.css
 return 1
 }
 #  ----------------------------------
@@ -77,7 +122,7 @@ echo 'Install && config web ... '
 for ((i=1; i<${#context[@]}; i++))
 do
 data=(${context[i]:1:-1})
-[[ ! -d $${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]}
+[[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/scripts ${wwwFolder}/${data[2]}/img
 [[ -z $data ]] && break
 thisSite='<!DOCTYPE html>\n<html lang="es-ES"><head><meta charset="utf-8" />\n<style>body{background:'
 #[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]}":"
@@ -107,7 +152,8 @@ thisSite="server {\nlisten "
 thisSite+="80;\nlisten [::]:80;\nserver_name "
 [[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+="_"
 thisSite+=";\ncharset utf-8;\nroot ${wwwFolder}/${data[2]};\nindex index.html index.htm;\n"
-thisSite+="# location\ninclude /etc/nginx/errors.conf;\ninclude /etc/nginx/drop.conf;\n}"
+thisSite+="# location\nlocation /include { alias "${wwwFolder}/include"; autoindex off; }\n"
+thisSite+="include /etc/nginx/errors.conf;\ninclude /etc/nginx/drop.conf;\n}"
 echo -e $thisSite > ${appFolder}/${data[3]}.conf
 if [ ! -z ${data[5]:1:-1} ]; then 
 line2add="location /"${data[0]%%.*}" { alias "${wwwFolder}/${data[2]}"; autoindex off; }"
@@ -123,14 +169,17 @@ function finalissues(){
 echo -n 'Final issues ... '
 return 1
 }
+
 #  ---------------------------------------------------------
-appUsables=(update error web domain ending)
+#
+appUsables=(init web domain includeFolder error ending)
 for app in ${appUsables[*]} ; do
 case  $app  in
-    update) updateSystem ;;
+    init) initialissues ;;
     error) errorFiles ;;
     web) configWeb ;;
-    domain) domainConfig;;
+    domain) domainConfig ;;
+    include) includeFolder ;;
     ending) finalissues ;;
     *) echo 'Unable to install [ '$app' ]. Attempt: apt-get install '$app;;
 esac
