@@ -11,12 +11,12 @@ source ./context.sh
 function initialissues(){
 echo "#\n----------------------------"
 echo 'Initial issues ...'
-[[ ! -d $${wwwFolder} ]] && mkdir -p ${wwwFolder}
+[[ ! -d ${wwwFolder} ]] && mkdir -p ${wwwFolder}
 }
 #  ----------------------------------
 function includeFolder(){
 echo 'Create include folder ... '
-[[ ! -d $${wwwFolder}/include ]] && mkdir -p 
+[[ ! -d ${wwwFolder}/include ]] && mkdir -p ${wwwFolder}/include
 wget https://code.jquery.com/jquery-3.3.1.min.js -P ${wwwFolder}/include/jquery.min.js
 #
 }
@@ -122,7 +122,7 @@ echo 'Install && config web ... '
 for ((i=1; i<${#context[@]}; i++))
 do
 data=(${context[i]:1:-1})
-[[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/js ${wwwFolder}/${data[2]}/img
+[[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/scripts ${wwwFolder}/${data[2]}/img
 [[ -z $data ]] && break
 thisSite='<!DOCTYPE html>\n<html lang="es-ES"><head><meta charset="utf-8" />\n<style>body{background:'
 #[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]}":"
@@ -148,7 +148,7 @@ do
 data=(${context[i]:1:-1})
 [[ -z $data ]] && break
 thisSite="server {\nlisten "
-[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]}":"
+[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]:1:-1}":"
 thisSite+="80;\nlisten [::]:80;\nserver_name "
 [[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+="_"
 thisSite+=";\ncharset utf-8;\nroot ${wwwFolder}/${data[2]};\nindex index.html index.htm;\n"
@@ -172,7 +172,7 @@ return 1
 
 #  ---------------------------------------------------------
 #
-appUsables=(init web domain includeFolder error ending)
+appUsables=(init web domain include error ending)
 for app in ${appUsables[*]} ; do
 case  $app  in
     init) initialissues ;;
