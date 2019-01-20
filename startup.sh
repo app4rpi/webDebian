@@ -5,7 +5,7 @@
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 LINE="-----------------------------------------------"
-lineOrder=( "${@,,}" )
+lineOrder="${@,,}"
 #  ----------------------------------
 function isCorrect(){
 while true; do  read -r -p "Are all correct & continue? [Y/n] " input
@@ -26,9 +26,9 @@ return 1
 function initialissues(){
 echo -e "#\nStart install & config server."
 echo -e '# '$LINE$LINE
-[[ ${#lineOrder[@]} -eq 0 ]] && echo -e 'Line orders usage & options:\n   ./start.sh [NOIP] [ERRORLOCAL] <nameMainDomain>.<extension> <subdomain> <subdomain> <...>\n# '$LINE$LINE
+[[ ${#lineOrder} -eq 0 ]] && echo -e 'Line orders usage & options:\n   ./start.sh [NOIP] [ERRORLOCAL] <nameMainDomain>.<extension> <subdomain> <subdomain> <...>\n# '$LINE$LINE
 echo -en '  Initials issues: · Line orders info: '
-[[ -z "${lineOrder[@]}" ]] && echo -e "<none>" || echo -e ${lineOrder[@]}
+[[ -z "${lineOrder}" ]] && echo -e "<none>" || echo -e ${lineOrder[@]}
 echo -e '# '$LINE$LINE
 IP4=$(ifconfig eth0 | grep "inet addr" )
 IP4=(${IP4//"inet addr:"})
@@ -40,18 +40,25 @@ echo -e '# '$LINE$LINE
 #
 MAINIP4=$IP4
 #[[ -z "${lineOrder[@]##*"noip"*}" ]] && MAINIP4="" || MAINIP4=$IP4
-[[ ${lineOrder[@]} = *"noip"* ]] && { MAINIP4=""; lineOrder=( ${lineOrder[@]//'noip'/} ); }
+[[ ${lineOrder} = *"noip"* ]] && { MAINIP4=""; lineOrder=${lineOrder//'noip'/}; }
 echo -n 'Main IP: '
 [[ -z "$MAINIP4" ]] && echo -e "<none>" || echo -e $MAINIP4
-[[ -z "${lineOrder[0]}" ]] && MAINDOMAIN="" || MAINDOMAIN=${lineOrder[0]}
-[[ ! $MAINDOMAIN == *"."* ]] && MAINDOMAIN=""
+[[ ${lineOrder} = *"errorlocal"* ]] && { ERRORLOCAL=true; lineOrder=${lineOrder//'errorlocal'/}; } || ERRORLOCAL=false
+if [[ ${lineOrder} = *"."* ]]; then
+	ext=${lineOrder//*./};ext=${ext// */}
+	dom=${lineOrder//.*/};dom=${dom//* /}
+	domain=$dom.$ext
+	lineOrder=${lineOrder//$domain/}
+	[[ -z $dom || -z $ext ]] && { MAINDOMAIN=""; lineOrder=''; } || MAINDOMAIN=$domain
+   else
+	MAINDOMAIN=""
+   fi
 echo -n 'Main domain: '
-[[ -z "$MAINDOMAIN" ]] && echo -e "<none>" || echo -e ${lineOrder[0]}
-[[ -z "$MAINDOMAIN" ]] && SUBDOMAINS="" || SUBDOMAINS=${lineOrder[@]//$MAINDOMAIN/}
+[[ -z "$MAINDOMAIN" ]] && echo -e "<none>" || echo -e $MAINDOMAIN
 echo -en 'Subdomains: ' 
-[[ -z "$SUBDOMAINS" ]] && echo -e "<none>" || { SUBDOMAINS="${SUBDOMAINS} "; echo -e ${SUBDOMAINS// /.$MAINDOMAIN }; } 
+[[ -z $lineOrder ]] && echo -e "<none>" || { SUBDOMAINS=${lineOrder}; echo -e ${SUBDOMAINS}; } 
 echo -en "Error page style [error.css]: "
-if [[ ${lineOrder[@]} = *"errorlocal"* ]]; then
+if [[ $ERRORLOCAL = true ]]; then
 	echo "Configurable style for each domain in the local directory './css'"
 	lineOrder=( ${lineOrder[@]//"errorlocal"/} )
 	ERRORLOCAL=true
@@ -77,8 +84,8 @@ temp2='export mainIP="'$MAINIP4'"'
 echo $temp2
 colors=$(sed -e '/color=/ !d' $file)
 colors=( ${colors:7:-1} )
-random=$(date +%4N)
-MAINCOLOR=${colors[${random:3}]}
+random=$(date +%4N);random=${random:3};
+MAINCOLOR=${colors[$random]}
 temp3="export mainColor="$MAINCOLOR
 echo $temp3
 #
@@ -87,8 +94,7 @@ tempSub=( ${SUBDOMAINS} )
 declare -a  SUBDOMAINS
 for ((i=0; i<${#tempSub[@]}; i++))
 	do
-	random=$(date +%4N)
-	temp='"('${tempSub[i]}.$MAINDOMAIN" '"$MAINIP4"' "${tempSub[i]}" "${tempSub[i]}Site" "${colors[${random:3}]}" "mainSite')"'
+	temp='"('${tempSub[i]}.$MAINDOMAIN" '"$MAINIP4"' "${tempSub[i]}" "${tempSub[i]}Site" "${colors[$random+$i+1]}" "mainSite')"'
 	SUBDOMAINS+=("$temp") 
 	echo $temp
 	done
