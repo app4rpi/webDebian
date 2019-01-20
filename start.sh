@@ -1,4 +1,3 @@
-#!/bin/bash
 # This script has been tested on Debian 8 Jessie image
 #
 # chmod +x ./start.sh
@@ -7,9 +6,9 @@ if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 LINE="-------------------------------------------------------"
 #lineOrder="${@,,}"
 #
-file=(startup.sh setup.sh context.sh nginxConfig.sh syncDav.sh)
 #  ---------------------------------------------------------
 function loadBashFiles(){
+file=(start.sh startup.sh setupServer.sh context.sh nginxConfig.sh syncDav.sh)
 echo -en 'Create the <./startup> directory for the shell files and copy git files  : '
 [ ! "$(ls -A ./startup)" ] && mkdir -p ./startup 
 for ((i=0; i<${#file[@]}; i++))
@@ -33,7 +32,7 @@ displayMenu() {
  echo -e "  1. Update <StartUp> files"
  echo -e "  2. Update server & install ufw firewall, git, Docker,..."
  echo -e "  3. Prepare web server context"
- echo -e "  4. Create web server file & folder structure"
+ echo -e "  4. Create web server files & folders structure"
  echo -e "  x. Exit"
  echo -e $LINE 
 }
@@ -46,7 +45,9 @@ echo -en "\t"
 
  case $choice in
  1) updateStartUp ;;
+ 2) setupServer ;;
  3) prepareContext ;;
+ 4) createStructure ;;
  x) exit 0;;
  *) echo -e "${RED}Error...${STD}" && sleep 2
  esac
@@ -60,6 +61,32 @@ return 1
 function initialissues(){
 [[ ! -d ./startup ]] && { echo "<./startup> directory is unable"; exit; }
 echo -e 'Initial issues ... '
+return 1
+}
+#  ----------------------------------
+function setupServer(){
+echo
+echo $LINE$LINE
+echo
+echo $LINE$LINE
+read -n1 -r -p "Press any key to continue (x to cancel)..." key
+cd startup
+./setupServer.sh
+cd ..
+read -n1 -r -p "Press any key to continue ..." key
+return 1
+}
+#  ----------------------------------
+function createStructure(){
+echo
+echo $LINE$LINE
+echo
+echo $LINE$LINE
+read -n1 -r -p "Press any key to continue (x to cancel)..." key
+cd startup
+./nginxConfig.sh
+cd ..
+read -n1 -r -p "Press any key to continue ..." key
 
 return 1
 }
@@ -81,7 +108,7 @@ echo "----------------------------------"
 echo "·   [<none>] Config with system IP, without <domainName.ext>, 'error.css' style page global"
 echo "·   [NOIP] [<nameMainDomain>.<extension>] [<subdomain> <subdomain>] [ERRORLOCAL]"
 echo "·   [x]  Cancel & Return"3
-echo -e $LINE 
+echo -e $LINE$LINE 
 read -p "   > " lineOrder
 [[ $lineOrder = "x" ]] && return
 cd startup
