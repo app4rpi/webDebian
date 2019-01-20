@@ -122,7 +122,7 @@ echo 'Install && config web ... '
 for ((i=1; i<${#context[@]}; i++))
 do
 data=(${context[i]:1:-1})
-[[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/scripts ${wwwFolder}/${data[2]}/img
+[[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/js ${wwwFolder}/${data[2]}/img
 [[ -z $data ]] && break
 thisSite='<!DOCTYPE html>\n<html lang="es-ES"><head><meta charset="utf-8" />\n<style>body{background:'
 #[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]}":"
