@@ -11,7 +11,7 @@ function isCorrect(){
 while true; do  read -r -p "Are all correct & continue? [Y/n] " input
   case $input in 
 	[yY][eE][sS]|[sS][iI]|[yYsS]) break ;;
-	[nN][oO]|[nN]) exit 0 ;; 
+	[nN][oO]|[nN]) exit 1 ;; 
   	*) echo -n  "Invalid input...  ->   " ;;
  esac
 done
