@@ -17,8 +17,7 @@ echo 'Initial issues ...'
 function includeFolder(){
 echo 'Create include folder ... '
 [[ ! -d ${wwwFolder}/include ]] && mkdir -p ${wwwFolder}/include
-[[ ! -f ${wwwFolder}/include/jquery.min.js ]] && echo "jquery EXISTEIX" || echo "jquery NO EXISTEIX"
-#wget https://code.jquery.com/jquery-3.3.1.min.js -P ${wwwFolder}/include/jquery.min.js
+[[ ! -f ${wwwFolder}/include/jquery.min.js ]] && wget -O ${wwwFolder}/include/jquery.min.js https://code.jquery.com/jquery-3.3.1.min.js 
 #
 }
 #  ----------------------------------
@@ -135,9 +134,10 @@ for ((i=1; i<${#context[@]}; i++))
 do
 data=(${context[i]:1:-1})
 [[ -z $data ]] && break
-thisSite="server {\nlisten "
-[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]:1:-1}":"
-thisSite+="80;\nlisten [::]:80;\nserver_name "
+thisSite="server {\nlisten 80"
+#[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]:1:-1}":"
+[[ ${data[0]} = ${mainDomain} ]] && thisSite+=" default_server"
+thisSite+=";\nlisten [::]:80;\nserver_name "
 [[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+="_"
 thisSite+=";\ncharset utf-8;\nroot ${wwwFolder}/${data[2]};\nindex index.html index.htm;\n"
 thisSite+="# location\nlocation /include { alias "${wwwFolder}/include"; autoindex off; }\n"
