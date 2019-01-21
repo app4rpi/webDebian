@@ -20,20 +20,21 @@ export appFolder="/app/nginx"
 export wwwFolder="/var/www"
 export errorDir="/var/www/error"
 export errorStyleLocal=false 		
-color=('#DC443A' '#98243A' '#11589F' '#715138' '#D69C2F9' '#616247' '#898E88' '#2e5090C' '#5F4B8B' '#BA0020' '#0E3A53' '#DC443A' '#98243A' '#11589F' '#715138' '#D69C2F9' '#616247' '#898E88' '#2e5090C' '#5F4B8B') 
+#errorStyleLocal=False for Global, [/var/www/error]  | =True for Local, [www<site>/style dir]
+color=('#DC443A' '#98243A' '#11589F' '#715138' '#D69C2F9' '#616247' '#898E88' '#2e5090' '#5F4B8B' '#BA0020' '#0E3A53' '#DC443A' '#98243A' '#11589F' '#715138' '#D69C2F9' '#616247' '#898E88' '#2e5090' '#5F4B8B')
 #
 echo "# --------------------------------------------------------------------------"
 echo "# Data order [ domain : IP : workDir nameSite colorSite subDirIn ]"
 echo "# --------------------------------------------------------------------------"
-export context=("(domain IP workDir nameSite colorSite subDirIn)" 
-"('' '' html mainSite '')" 
-"()" 
-"()" 
-"()" 
-"()" 
-"()" 
-"()" 
-"()" 
+export context=("(domain IP workDir nameSite colorSite subDirIn)"
+"('' '' html mainSite '')"
+"()"
+"()"
+"()"
+"()"
+"()"
+"()"
+"()"
 "()"
 ) 
 #
