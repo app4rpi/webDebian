@@ -41,6 +41,7 @@ echo -e '# '$LINE$LINE
 MAINIP4=$IP4
 #[[ -z "${lineOrder[@]##*"noip"*}" ]] && MAINIP4="" || MAINIP4=$IP4
 [[ ${lineOrder} = *"noip"* ]] && { MAINIP4=""; lineOrder=${lineOrder//'noip'/}; }
+MAINIP4=""
 echo -n 'Main IP: '
 [[ -z "$MAINIP4" ]] && echo -e "<none>" || echo -e $MAINIP4
 [[ ${lineOrder} = *"errorlocal"* ]] && { ERRORLOCAL=true; lineOrder=${lineOrder//'errorlocal'/}; } || ERRORLOCAL=false
@@ -126,4 +127,3 @@ initialissues
 configContext
 finalissues
 exit
-
