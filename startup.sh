@@ -72,7 +72,7 @@ return 1
 function configContext(){
 echo -en '<context.sh> config ... '
 file='context.sh'
-[[ ! -f ${file} ]] && { echo "Error: Required file "${file}" not exist!"; exit; }
+[[ ! -f ${file} ]] && { echo "Error: Required file "${file}" not exist!"; exit 1; }
 [[ -f $file && ! -f "${file%.sh}".old ]] && cp "${file}" "${file%.sh}".old
 verifiedContext=$(sed -e '/^export verifiedContext/ !d' $file)
 verifiedContext=( ${verifiedContext:23} )
