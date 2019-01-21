@@ -17,7 +17,8 @@ echo 'Initial issues ...'
 function includeFolder(){
 echo 'Create include folder ... '
 [[ ! -d ${wwwFolder}/include ]] && mkdir -p ${wwwFolder}/include
-wget https://code.jquery.com/jquery-3.3.1.min.js -P ${wwwFolder}/include/jquery.min.js
+[[ ! -f ${wwwFolder}/include/jquery.min.js ]] && echo "jquery EXISTEIX" || echo "jquery NO EXISTEIX"
+#wget https://code.jquery.com/jquery-3.3.1.min.js -P ${wwwFolder}/include/jquery.min.js
 #
 }
 #  ----------------------------------
@@ -47,7 +48,7 @@ errorTextCat=("El codi d'error 4xx sol indicar casos en qu&egrave; el client sem
 "El servidor no pot trobar el recurs sol·licitat.")
 [[ ! -d ${errorDir} ]] && mkdir -p ${errorDir}
 echo -n '['${errorDir}'/] :'
-[[ ${errorStyleLocal} = true ]] && errorCss='css' || errorCss='/errors'
+[[ ${errorStyleLocal} = true ]] && errorCss='css' || errorCss='/error'
 for ((i=0; i<${#errorNum[@]}; i++))
 do
 mainPage='<!DOCTYPE html>\n<html lang="es-ES">\n<head>\n<meta charset="utf-8" />\n
@@ -64,24 +65,11 @@ mainPage+="</article></body></html>"
 echo -e $mainPage >  ${errorDir}/${errorNum[i]}.html
 echo -n ' '${errorNum[i]}.html
 done
-mainCSS='body {background: '
-mainCSS+=${mainColor}
-mainCSS+=';color: #aaa; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; overflow:hidden}'
-mainCSS+="\n#one { position: absolute; left: 0px; width: 396px; font-size: 36px; padding-top: 16px; border-right: 1px solid #ffffff; text-align: center; }"
-mainCSS+='\n#dos { position: relative; left: 439px;  font-size: 16px;padding-top: 8px; width: 696px;  }'
-mainCSS+='\n#dos p {line-height: 4px;}'
-mainCSS+='\n#dos h3 {padding: 16px 0  0 0;margin:0;}'
-mainCSS+='\n#mes {  font-size: 56px; }'
-mainCSS+='\n.number { font-size: 196px; line-height: 169px; }'
-mainCSS+="\narticle {position: fixed; top: 50%; left: 35%; transform: translate(-50%, -50%);}"
-mainCSS+='\nobject { width: 696px; }'
-mainCSS+='\np a, p a:visited {color: #aaa;}'
-
 data=(${context[1]:1:-1})
 echo
 echo -n 'Create <error.css> file in ...  '${errorDir}
 
-errorCSS ${errorDir} ${data[4]}
+errorCSS ${errorDir} ${data[4]:1:-1}
 
 
 
@@ -92,7 +80,7 @@ do
 data=(${context[i]:1:-1})
 [[ -z $data ]] && break
 block=(${block:1:-1})
-errorCSS ${wwwFolder}/${data[2]}/css ${data[4]}
+errorCSS ${wwwFolder}/${data[2]}/css ${data[4]:1:-1}
 echo -n ' '${data[2]}'/css'
 done
 fi
@@ -126,7 +114,7 @@ data=(${context[i]:1:-1})
 [[ -z $data ]] && break
 thisSite='<!DOCTYPE html>\n<html lang="es-ES"><head><meta charset="utf-8" />\n<style>body{background:'
 #[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]}":"
-[[ -n ${data[4]:1:-1} ]] && thisSite+=${data[4]} || thisSite+=${mainColor}
+[[ -n ${data[4]:1:-1} ]] && thisSite+=${data[4]:1:-1} || thisSite+=${mainColor}
 #thisSite+=${data[4]}
 thisSite+=';font:bold normal 4em "Arial"}\nh1{color:#ded;margin-top:21%;text-align:center;}</style>\n'
 thisSite+="</head><body><h1>"
