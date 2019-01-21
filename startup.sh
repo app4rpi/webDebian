@@ -61,10 +61,8 @@ echo -en "Error page style [error.css]: "
 if [[ $ERRORLOCAL = true ]]; then
 	echo "Configurable style for each domain in the local directory './css'"
 	lineOrder=( ${lineOrder[@]//"errorlocal"/} )
-	ERRORLOCAL=true
 	else
-	echo "Unique style for all domains and subdomains in '/errors' directory"
-	ERRORLOCAL=false
+	echo "Unique style for all domains and subdomains in '/error/' directory"
 fi
 echo -e '# '$LINE$LINE
 return 1
@@ -108,7 +106,7 @@ sed -ie "s/^export mainIP.*$/${temp2}/g" $file
 sed -ie "s/^export mainColor.*$/${temp3}/g" $file
 [[ -n "$MAINDOMAIN" ]] && sed -ie "s/(''/($MAINDOMAIN/g" $file
 [[ -n "$MAINIP4" ]] && sed -ie "s/'' html/'$MAINIP4' html/g" $file
-sed -ie "s/'')/'$MAINCOLOR')/g" $file
+sed -ie "s/'')/$MAINCOLOR)/g" $file
 for ((i=0; i<${#SUBDOMAINS[@]}; i++))
 	do
 	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[i]}"'/}' $file
@@ -128,3 +126,4 @@ initialissues
 configContext
 finalissues
 exit
+
