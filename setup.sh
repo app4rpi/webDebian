@@ -138,7 +138,6 @@ else
 fi
 echo -e $LINE$LINE 
 read -n 1 -s -r -p "Press any key to continue > "
-exit
 #  ---------------------------------------------------------
 # SSL configuration
 echo
