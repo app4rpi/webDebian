@@ -1,13 +1,14 @@
+#!/bin/bash
 # This script has been tested on Debian 8 Jessie image
-#
 # chmod +x ./nginxStart.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 LINE="-------------------------------------------------------"
 #lineOrder="${@,,}"
-echo $LINE$LINE
 dockerImage='app2linux/nginx21ssl:latest'
-echo 'Image: '$dockerImage
+echo
+echo 'Download Docker Image: '$dockerImage
+echo $LINE$LINE
 
 docker push $dockerImage
 
