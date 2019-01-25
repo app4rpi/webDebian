@@ -7,7 +7,7 @@ LINE="-------------------------------------------------------"
 lineOrder="${@,,} "
 FILE="/etc/davfs2/secrets"
 POINT=/mnt/dav
-BACKUPDIR="/backup/"$mainDomain
+BACKUPDIR=/backup/$mainDomain
 DIR2SYNC=(/app /var/www /etc/letsencrypt)
 [[ ! -d ${POINT} ]] && mkdir ${POINT}
 #  ---------------------------------------------------------
