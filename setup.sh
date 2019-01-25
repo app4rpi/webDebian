@@ -165,7 +165,7 @@ while $reLoop; do
     read -p "   > " lineOrder
     [[ $lineOrder =~ ^(x|X) ]] && exit
     [[ $lineOrder =~ ^(c|C) ]] && break
-    ./syncDav.sh $lineOrder
+    ./setupDav.sh $lineOrder
     valor=$(echo "$?")
     [[ "${valor}" == 1 ]] && break
     done
