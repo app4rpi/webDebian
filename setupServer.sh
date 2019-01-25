@@ -9,23 +9,6 @@ ifconfig eth0 | grep inet | awk '{ print $2 }'
 #  ---------------------------------------------------------
 RELEASE=$(lsb_release -cs)
 #  ---------------------------------------------------------
-function updateSystem(){
-cat /etc/issue
-echo "#  ----------------------------------"
-echo 'Update system: '${RELEASE}
-file='/etc/apt/sources.list'
-echo -e 'File to update : '$file
-[[ -f $file && ! -f $file.old ]] && mv $file $file.old
-cat <<EOF  > $file
-deb http://ftp.debian.org/debian/ ${RELEASE} main contrib non-free
-#!/bin/bash
-# This script has been tested on Debian 8 Jessie image
-# chmod +x ./setupServer.sh
-#  ---------------------------------------------------------
-if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-echo -e "Start install & config server."
-ifconfig eth0 | grep inet | awk '{ print $2 }'
-#  ---------------------------------------------------------
 function installFirewall(){
 echo "#  ----------------------------------"
 echo 'Install && config ufw Firewall ... '
