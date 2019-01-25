@@ -1,6 +1,5 @@
 #!/bin/bash
 # This script has been tested on Debian 8 Jessie image
-#
 # chmod +x ./nginxConfig.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
@@ -64,24 +63,20 @@ mainPage+="</article></body></html>"
 echo -e $mainPage >  ${errorDir}/${errorNum[i]}.html
 echo -n ' '${errorNum[i]}.html
 done
+#
 data=(${context[1]:1:-1})
 echo
 echo -n 'Create <error.css> file in ...  '${errorDir}
-
 errorCSS ${errorDir} ${data[4]:1:-1}
-
-
-
 if [[ $errorStyleLocal = true ]]; then
-echo -n '  ['${wwwFolder}/'/] :'
-for ((i=1; i<${#context[@]}; i++))
-do
-data=(${context[i]:1:-1})
-[[ -z $data ]] && break
-block=(${block:1:-1})
-errorCSS ${wwwFolder}/${data[2]}/css ${data[4]:1:-1}
-echo -n ' '${data[2]}'/css'
-done
+    echo -n '  ['${wwwFolder}/'/] :'
+    for ((i=1; i<${#context[@]}; i++)); do
+        data=(${context[i]:1:-1})
+        [[ -z $data ]] && break
+        block=(${block:1:-1})
+        errorCSS ${wwwFolder}/${data[2]}/css ${data[4]:1:-1}
+        echo -n ' '${data[2]}'/css'
+    done
 fi
 echo
 return
@@ -106,22 +101,19 @@ return 1
 #  ----------------------------------
 function configWeb(){
 echo 'Install && config web ... '
-for ((i=1; i<${#context[@]}; i++))
-do
-data=(${context[i]:1:-1})
-[[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/scripts ${wwwFolder}/${data[2]}/img
-[[ -z $data ]] && break
-thisSite='<!DOCTYPE html>\n<html lang="es-ES"><head><meta charset="utf-8" />\n<style>body{background:'
-#[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]}":"
-[[ -n ${data[4]:1:-1} ]] && thisSite+=${data[4]:1:-1} || thisSite+=${mainColor}
-#thisSite+=${data[4]}
-thisSite+=';font:bold normal 4em "Arial"}\nh1{color:#ded;margin-top:21%;text-align:center;}</style>\n'
-thisSite+="</head><body><h1>"
-[[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+='Welcome to nginx'
-thisSite+="</h1></body></html>"
-echo -e $thisSite > ${wwwFolder}/${data[2]}/index.html
-cat ${wwwFolder}/${data[2]}/index.html
-echo "# ----------------------------"
+for ((i=1; i<${#context[@]}; i++)); do
+    data=(${context[i]:1:-1})
+    [[ ! -d ${wwwFolder}/${data[2]} ]] && mkdir -p ${wwwFolder}/${data[2]} ${wwwFolder}/${data[2]}/css ${wwwFolder}/${data[2]}/scripts ${wwwFolder}/${data[2]}/img
+    [[ -z $data ]] && break
+    thisSite='<!DOCTYPE html>\n<html lang="es-ES"><head><meta charset="utf-8" />\n<style>body{background:'
+    [[ -n ${data[4]:1:-1} ]] && thisSite+=${data[4]:1:-1} || thisSite+=${mainColor}
+    thisSite+=';font:bold normal 4em "Arial"}\nh1{color:#ded;margin-top:21%;text-align:center;}</style>\n'
+    thisSite+="</head><body><h1>"
+    [[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+='Welcome to nginx'
+    thisSite+="</h1></body></html>"
+    echo -e $thisSite > ${wwwFolder}/${data[2]}/index.html
+    cat ${wwwFolder}/${data[2]}/index.html
+    echo "# ----------------------------"
 done
 
 return 1
@@ -130,26 +122,23 @@ return 1
 function domainConfig(){
 echo 'Config server ... '
 [[ ! -d ${appFolder} ]] && mkdir -p ${appFolder}
-for ((i=1; i<${#context[@]}; i++))
-do
-data=(${context[i]:1:-1})
-[[ -z $data ]] && break
-thisSite="server {\nlisten 80"
-#[[ -n ${data[1]:1:-1} ]] && thisSite+=${data[1]:1:-1}":"
-[[ ${data[0]} = ${mainDomain} ]] && thisSite+=" default_server"
-thisSite+=";\nlisten [::]:80;\nserver_name "
-[[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+="_"
-thisSite+=";\ncharset utf-8;\nroot ${wwwFolder}/${data[2]};\nindex index.html index.htm;\n"
-thisSite+="# location\nlocation /include { alias "${wwwFolder}/include"; autoindex off; }\n"
-thisSite+="include /etc/nginx/errors.conf;\ninclude /etc/nginx/drop.conf;\n}"
-echo -e $thisSite > ${appFolder}/${data[3]}.conf
-if [ ! -z ${data[5]:1:-1} ]; then 
-line2add="location /"${data[0]%%.*}" { alias "${wwwFolder}/${data[2]}"; autoindex off; }"
-#sed -ie "s/# location/$line2add/g" ${appFolder}/${data[5]}.conf
-sed -i "/# location/i ${line2add}" ${appFolder}/${data[5]}.conf
-fi
-cat ${appFolder}/${data[3]}.conf
-echo "# ----------------------------"
+for ((i=1; i<${#context[@]}; i++)); do
+    data=(${context[i]:1:-1})
+    [[ -z $data ]] && break
+    thisSite="server {\nlisten 80"
+    [[ ${data[0]} = ${mainDomain} ]] && thisSite+=" default_server"
+    thisSite+=";\nlisten [::]:80;\nserver_name "
+    [[ -n ${data[0]:1:-1} ]] && thisSite+=${data[0]} || thisSite+="_"
+    thisSite+=";\ncharset utf-8;\nroot ${wwwFolder}/${data[2]};\nindex index.html index.htm;\n"
+    thisSite+="# location\nlocation /include { alias "${wwwFolder}/include"; autoindex off; }\n"
+    thisSite+="include /etc/nginx/errors.conf;\ninclude /etc/nginx/drop.conf;\n}"
+    echo -e $thisSite > ${appFolder}/${data[3]}.conf
+    if [ ! -z ${data[5]:1:-1} ]; then 
+        line2add="location /"${data[0]%%.*}" { alias "${wwwFolder}/${data[2]}"; autoindex off; }"
+        sed -i "/# location/i ${line2add}" ${appFolder}/${data[5]}.conf
+    fi
+    cat ${appFolder}/${data[3]}.conf
+    echo "# ----------------------------"
 done
 }
 #  ----------------------------------
@@ -157,7 +146,6 @@ function finalissues(){
 echo -n 'Final issues ... '
 return 1
 }
-
 #  ---------------------------------------------------------
 #
 appUsables=(init web domain include error ending)
