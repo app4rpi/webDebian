@@ -1,6 +1,5 @@
 #!/bin/bash
 # This script has been tested on Debian 8 Jessie image
-#
 # chmod +x ./startup.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
@@ -39,7 +38,6 @@ echo '   |   IP6: ' $IP6
 echo -e '# '$LINE$LINE
 #
 MAINIP4=$IP4
-#[[ -z "${lineOrder[@]##*"noip"*}" ]] && MAINIP4="" || MAINIP4=$IP4
 [[ ${lineOrder} = *"noip"* ]] && { MAINIP4=""; lineOrder=${lineOrder//'noip'/}; }
 MAINIP4=""
 echo -n 'Main IP: '
@@ -118,6 +116,7 @@ echo "Saved data"
 return 1
 }
 #  ----------------------------------
+# 
 MAINIP4=''
 MAINDOMAIN=""
 SUBDOMAINS=""
