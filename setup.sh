@@ -24,7 +24,7 @@ echo -e "#\nAutomatic install & config & start server and web server."
 echo -e '# '$LINE$LINE
 #  ---------------------------------------------------------
 # Initial issues
-file=(start.sh setupServer.sh startup.sh context.sh nginxConfig.sh syncDav.sh letsencrypt.sh nginxStart.sh test.sh)
+file=(start.sh setupServer.sh startup.sh context.sh nginxConfig.sh setupDav.sh letsencrypt.sh nginxStart.sh test.sh)
 echo -en 'Create the <./startup> directory for the shell files and copy git files  : '
 [ ! "$(ls -A ./startup)" ] && mkdir -p ./startup 
 for ((i=0; i<${#file[@]}; i++)); do
