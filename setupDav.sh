@@ -9,6 +9,7 @@ FILE="/etc/davfs2/secrets"
 POINT=/mnt/dav
 BACKUPDIR="/backup/"$mainDomain
 DIR2SYNC=(/app /var/www /etc/letsencrypt)
+[[ ! -d ${POINT} ]] && mkdir ${POINT}
 #  ---------------------------------------------------------
 echo -e "\nBackup configuration parameters"
 echo $LINE$LINE
@@ -46,6 +47,7 @@ if $(grep -q ^https: /etc/davfs2/secrets); then echo nameserver 1.1.1.1
 fi
 echo $webDav $user $pw >> /etc/davfs2/secrets
 echo $webDav $POINT davfs rw,user,uid=root,noauto 0 0 >> /etc/fstab
+[[ ! -d ${POINT} ]] && mkdir ${POINT}
 #
 if [[ ! -f syncDav.sh ]]; then
     temp="#!/bin/bash\n# \n"
