@@ -1,6 +1,5 @@
 #!/bin/bash
 # This script has been tested on Debian 8 Jessie image
-#
 # chmod +x ./context.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
@@ -52,4 +51,3 @@ done
 export verifiedContext=false
 export folderCreated=false
 echo "# --------------------------------------------------------------------------"
-
