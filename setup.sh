@@ -144,7 +144,7 @@ echo
 echo "Defineix SSL:"
 echo -e $LINE
 [[ ! -d /etc/letsencrypt ]] && mkdir -p /etc/letsencrypt
-./letsencryt.sh 
+./letsencrypt.sh 
 echo -e $LINE$LINE 
 read -n 1 -s -r -p "Press any key to continue > "
 #  ---------------------------------------------------------
