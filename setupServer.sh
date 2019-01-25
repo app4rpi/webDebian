@@ -18,19 +18,14 @@ echo -e 'File to update : '$file
 [[ -f $file && ! -f $file.old ]] && mv $file $file.old
 cat <<EOF  > $file
 deb http://ftp.debian.org/debian/ ${RELEASE} main contrib non-free
-deb-src http://ftp.debian.org/debian/ ${RELEASE} main contrib non-free
-deb http://security.debian.org/ ${RELEASE}/updates main contrib
-deb-src http://security.debian.org/ ${RELEASE}/updates main contrib
-deb http://ftp.debian.org/debian/ ${RELEASE}-updates main contrib non-free
-deb-src http://ftp.debian.org/debian/ ${RELEASE}-updates main contrib non-free
-deb http://httpredir.debian.org/debian ${RELEASE} main contrib
-deb-src http://httpredir.debian.org/debian ${RELEASE} main contrib
-EOF
-#
-echo "# -----------"
-apt-get -y update
-}
-#  ----------------------------------
+#!/bin/bash
+# This script has been tested on Debian 8 Jessie image
+# chmod +x ./setupServer.sh
+#  ---------------------------------------------------------
+if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
+echo -e "Start install & config server."
+ifconfig eth0 | grep inet | awk '{ print $2 }'
+#  ---------------------------------------------------------
 function installFirewall(){
 echo "#  ----------------------------------"
 echo 'Install && config ufw Firewall ... '
@@ -48,10 +43,12 @@ echo '----------------------------'\n
 return 1
 }
 #  ----------------------------------------
-function installGit(){
+function installOther(){
 echo "#  ----------------------------------"
 echo 'Install git ... '
 [[ $(dpkg --get-selections git) ]] && echo "Git Already installed" || apt-get install -y git
+echo 'Install davfs2 ... '
+[[ $(dpkg --get-selections davfs2) ]] && echo "davfs2 installed" || apt-get -y install davfs2
 return 1
 }
 
@@ -74,12 +71,11 @@ echo 'Final issues ... '
 return 1
 }
 #  ---------------------------------------------------------
-appUsables=(update ufw docker git ending)
+appUsables=(ufw docker other ending)
 for app in ${appUsables[*]} ; do
 case  $app  in
-    update) updateSystem ;;
     ufw) installFirewall ;;
-    git) installGit ;;
+    other) installOther ;;
     docker) installDocker ;;
     ending) finalissues ;;
     *) echo 'Unable to install [ '$app' ]. Attempt: sudo apt-get install '$app;;
