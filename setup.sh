@@ -171,6 +171,9 @@ while $reLoop; do
     done
 echo
 echo -e $LINE$LINE 
+read -n 1 -s -r -p "  Press any key to continue > "
+echo
+
 #  ---------------------------------------------------------
 # Start nginx server
 clear
