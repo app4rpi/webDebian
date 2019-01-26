@@ -158,8 +158,9 @@ while $reLoop; do
     echo "Define backup parameters:"
     echo "(all needed):"
     echo -e $LINE 
-    echo "    dav=<davServer> user=<davUser> pw=davPw"
+    echo "    dav=<davServer> user=<davUser> pw=<davPw> [dir=<dir2backup>]"
     echo
+    echo "    (defaul dir or empty option is nameServer)"
     echo "    [x]  Cancel & Return   [c]  Continue without backup config"
     echo -e $LINE$LINE 
     read -p "   > " lineOrder
