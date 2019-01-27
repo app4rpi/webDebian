@@ -192,7 +192,7 @@ mv startup .startup
 sed -i '9,$d' setup.sh
 cat <<'EOF' >> setup.sh
 cd .startup
-start.sh
+./start.sh
 cd ..
 exit
 EOF
