@@ -140,16 +140,37 @@ echo -e $LINE$LINE
 read -n 1 -s -r -p "Press any key to continue > "
 #  ---------------------------------------------------------
 # SSL configuration
+domains=
+for ((i=1; i<${#context[@]}; i++)); do
+    data=(${context[i]:1:-1})
+    [[ -z $data ]] && break
+    domains+=${data[0]}" "
+    done
+while true; do
+    clear
+    echo
+    echo -e $LINE$LINE 
+    echo "Define LetsEncrypt options:"
+    echo -e $LINE 
+    echo "    [email=<myEmail>] [domains={<domainName> <domainName>]"
+    echo
+    echo "    LetsEncrypt registration email is optional"
+    echo "    If the domain options are empty, the default Domains are used:"
+    echo "    {"$domains"}"
+    echo 
+    echo "    [x]  Cancel & Return   [c]  Continue without backup config"
+    echo -e $LINE$LINE 
+    read -p "   > " lineOrder
+    [[ $lineOrder =~ ^(x|X) ]] && exit
+    [[ $lineOrder =~ ^(c|C) ]] && break
+[[ ! ${lineOrder} = *"domains="* ]] && lineOrder+=" domains={"${domains[@]:0:-1}"}"
+./letsencrypt.sh ${lineOrder}
+    valor=$(echo "$?")
+    [[ "${valor}" == 1 ]] && break
+    done
 echo
-echo "Defineix SSL:"
-echo -e $LINE
-[[ ! -d /etc/letsencrypt ]] && mkdir -p /etc/letsencrypt
-./letsencrypt.sh 
-echo -e $LINE$LINE 
-read -n 1 -s -r -p "Press any key to continue > "
 #  ---------------------------------------------------------
 # backup of data server: config & start
-clear
 reLoop=true
 while $reLoop; do
     clear
