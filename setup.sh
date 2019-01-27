@@ -174,7 +174,6 @@ echo
 echo -e $LINE$LINE 
 read -n 1 -s -r -p "  Press any key to continue > "
 echo
-
 #  ---------------------------------------------------------
 # Start nginx server
 clear
@@ -187,11 +186,12 @@ echo -e "\nFinished installation ...\n\n"
 #  ---------------------------------------------------------
 # final issues
 cd ..
+mv startup .startup
 #  ---------------------------------------------------------
 # Modify setup.sh file (this file)
 sed -i '9,$d' setup.sh
 cat <<'EOF' >> setup.sh
-cd startup
+cd .startup
 start.sh
 cd ..
 exit
