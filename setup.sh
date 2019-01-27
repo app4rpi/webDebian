@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script has been tested on Debian 8 Jessie image
 # chmod +x ./setup.sh
-# wget wget https://raw.githubusercontent.com/app2linux/webDebian/master/setup.sh
+# wget https://raw.githubusercontent.com/app2linux/webDebian/master/setup.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 #  ---------------------------------------------------------
@@ -189,7 +189,7 @@ cd ..
 mv startup .startup
 #  ---------------------------------------------------------
 # Modify setup.sh file (this file)
-sed -i '9,$d' setup.sh
+sed -i '8,$d' setup.sh
 cat <<'EOF' >> setup.sh
 cd .startup
 ./start.sh
