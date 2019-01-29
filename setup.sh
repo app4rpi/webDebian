@@ -163,8 +163,8 @@ while true; do
     read -p "   > " lineOrder
     [[ $lineOrder =~ ^(x|X) ]] && exit
     [[ $lineOrder =~ ^(c|C) ]] && break
-[[ ! ${lineOrder} = *"domains="* ]] && lineOrder+=" domains={"${domains[@]:0:-1}"}"
-./letsencrypt.sh ${lineOrder}
+    [[ ! ${lineOrder} = *"domains="* ]] && lineOrder+=" domains={"${domains[@]:0:-1}"}"
+    ./letsencrypt.sh ${lineOrder}
     valor=$(echo "$?")
     [[ "${valor}" == 1 ]] && break
     done
