@@ -31,7 +31,7 @@ fi
 FILE="/etc/davfs2/secrets"
 POINT=/mnt/dav
 BACKUPDIR=/backup/$dir
-DIR2SYNC=(/app /var/www /etc/letsencrypt)
+DIR2SYNC=(/app /var/www)
 #
 [[ ! -d ${backupFolder} ]] && mkdir -p ${backupFolder}
 [[ ! -d ${POINT} ]] && mkdir ${POINT}
