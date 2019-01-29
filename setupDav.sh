@@ -61,7 +61,7 @@ if [[ ! -f syncDav.sh ]]; then
     temp+="echo\necho Start backup ...\necho Remote backup dir: ${webDav}${BACKUPDIR}\n"
     temp+="echo '---------------------------------------------------------'\n"
     temp+="[[ ! -d ${POINT}${BACKUPDIR}/ ]] && { echo 'Unable Backup Dir'; exit; }\n"
-    temp+=" tar -cvf /app/backup/letsencrypt.tar /etc/letsencrypt"
+    temp+=" tar -cvf /app/backup/letsencrypt.tar /etc/letsencrypt\n"
     temp+="for DIR in \${DIR2SYNC[*]} ; do\n"
     temp+="    [[ -d \${DIR} ]] && rsync -urP -var --progress --delete \${DIR} ${POINT}${BACKUPDIR}/ || echo \${DIR} ' not exist!'\n"
     temp+="done\numount ${POINT}\n"
