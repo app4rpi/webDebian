@@ -32,6 +32,8 @@ echo 'Install git ... '
 [[ $(dpkg --get-selections git) ]] && echo "Git Already installed" || apt-get install -y git
 echo 'Install davfs2 ... '
 [[ $(dpkg --get-selections davfs2) ]] && echo "davfs2 installed" || apt-get -y install davfs2
+echo 'Install tar ... '
+[[ $(dpkg --get-selections tar) ]] && echo "tar installed" || apt-get -y install tar
 return 1
 }
 
