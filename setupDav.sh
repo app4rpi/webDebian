@@ -33,6 +33,7 @@ POINT=/mnt/dav
 BACKUPDIR=/backup/$dir
 DIR2SYNC=(/app /var/www /etc/letsencrypt)
 #
+[[ ! -d ${backupFolder} ]] && mkdir -p ${backupFolder}
 [[ ! -d ${POINT} ]] && mkdir ${POINT}
 hostDav=${webDav//*:\/\//};hostDav=${hostDav%/*};
 if ! ping -c 1 -W 1 "$hostDav"; then
