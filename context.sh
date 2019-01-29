@@ -16,6 +16,7 @@ export auxDomain=''
 export auxIP='' 
 #
 export appFolder="/app/nginx"
+export backupFolder="/app/backup"
 export wwwFolder="/var/www"
 export errorDir="/var/www/error"
 export errorStyleLocal=false 		
