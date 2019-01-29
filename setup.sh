@@ -152,12 +152,12 @@ while true; do
     echo -e $LINE$LINE 
     echo "Define LetsEncrypt options:"
     echo -e $LINE 
-    echo "    [email=<myEmail>] [domains={<domainName> <domainName>]"
+    echo "    [email=<myEmail>] [domains={<domainName> <domainName>] [sslOn]"
     echo
     echo "    LetsEncrypt registration email is optional"
     echo "    If the domain options are empty, the default Domains are used:"
     echo "    {"$domains"}"
-    echo 
+    echo "    sslOn > config ssl on domains"
     echo "    [x]  Cancel & Return   [c]  Continue without backup config"
     echo -e $LINE$LINE 
     read -p "   > " lineOrder
