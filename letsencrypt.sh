@@ -64,6 +64,7 @@ echo $LINE
 ./certbot-auto certonly --standalone
 echo $LINE$LINE
 echo
+./sslConfig.sh
 read -n 1 -s -r -p "  Press any key to continue > "
 echo
 exit 1
