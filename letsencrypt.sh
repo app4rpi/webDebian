@@ -64,7 +64,7 @@ echo $LINE
 ./certbot-auto certonly --standalone
 echo $LINE$LINE
 echo
-./sslConfig.sh
+[[ ${lineOrder} = *"sslon"* ]] && ./sslConfig.sh || echo 'ssl not configured on domains'
 read -n 1 -s -r -p "  Press any key to continue > "
 echo
 exit 1
