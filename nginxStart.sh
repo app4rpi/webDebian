@@ -11,5 +11,5 @@ echo 'Download Docker Image: '$dockerImage
 echo $LINE$LINE
 
 docker push $dockerImage
-
+# docker stop nginx && docker rm nginx
 docker run -d --restart always --net=host -v /var/www:/var/www/ -v /app/nginx:/etc/nginx/conf.d/ --name nginx app2linux/nginx2ssl:latest
