@@ -1,20 +1,25 @@
 # webDocker
-## SeUp server & maintenance options
+## Setp server
 ### setup.sh
 ```
 wget https://raw.githubusercontent.com/app2linux/webDebian/master/setup.sh
 chmod +x ./setup.sh
 ./setup.sh
 ```
+## Sever maintenance options
+### setup.sh
+```
+./setup.sh
+```
 ### start.sh
 ```
-cd startup
+cd .startup
 ./start.sh
 cd ..
 ```
 ## Server files maintenance
 ```
-cd startup
+cd .startup
 ./<filename>.sh <options>
 cd ..
 ```
@@ -42,5 +47,5 @@ Update server & install
 ### nginxStart.sh
 Start docker nginx server
 ```
-./nginxStart.sh [start] [stop] [restart] [reimage] [console]
+./nginxStart.sh [start] [stop] [restart] [reimage] [console] [logs] [stat]
 ```
