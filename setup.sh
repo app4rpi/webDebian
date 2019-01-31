@@ -72,7 +72,6 @@ deb-src http://httpredir.debian.org/debian ${RELEASE} main contrib
 EOF
 #
 echo "# -----------"
-apt-get -y update
 #  ---------------------------------------------------------
 # Config system
 # setup server
