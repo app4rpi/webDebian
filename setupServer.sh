@@ -57,6 +57,7 @@ return 1
 }
 #  ---------------------------------------------------------
 appUsables=(ufw docker other ending)
+apt-get -y update
 for app in ${appUsables[*]} ; do
 case  $app  in
     ufw) installFirewall ;;
