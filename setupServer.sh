@@ -1,17 +1,16 @@
 #!/bin/bash
 # This script has been tested on Debian 8 Jessie image
-#
 # chmod +x ./setupServer.sh
-#
+#  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 echo -e "Start install & config server."
+LINE="-----------------------------------------------"
 ifconfig eth0 | grep inet | awk '{ print $2 }'
 #  ---------------------------------------------------------
 RELEASE=$(lsb_release -cs)
 #  ---------------------------------------------------------
 function installFirewall(){
-echo "#  ----------------------------------"
-echo 'Install && config ufw Firewall ... '
+echo -e $LINE "\nInstall && config ufw Firewall ... "
 [[ $(dpkg --get-selections ufw) ]] && { echo "Already installed";  return 1;}
 apt-get install -y ufw
 ufw enable
@@ -22,13 +21,12 @@ ufw allow 80/tcp
 ufw allow 443/tcp
 ufw status verbose
 echo 'fw installed'
-echo '----------------------------'\n
+echo -e $LINE "\n"
 return 1
 }
 #  ----------------------------------------
 function installOther(){
-echo "#  ----------------------------------"
-echo 'Install git ... '
+cho -e $LINE "\nInstall git ... "
 [[ $(dpkg --get-selections git) ]] && echo "Git Already installed" || apt-get install -y git
 echo 'Install davfs2 ... '
 [[ $(dpkg --get-selections davfs2) ]] && echo "davfs2 installed" || apt-get -y install davfs2
@@ -36,11 +34,9 @@ echo 'Install tar ... '
 [[ $(dpkg --get-selections tar) ]] && echo "tar installed" || apt-get -y install tar
 return 1
 }
-
 #  ----------------------------------
 function installDocker(){
-echo "#  ----------------------------------"
-echo 'Install docker ... '
+cho -e $LINE "\nInstall docker ... "
 [[ $(dpkg --get-selections docker-ce) ]] && { echo "Already installed";  return 1;}
 apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
