@@ -3,9 +3,7 @@
 # chmod +x ./setupServer.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-echo -e "\nStart install & config server."
 LINE="-----------------------------------------------"
-ifconfig eth0 | grep inet | awk '{ print $2 }'
 #  ---------------------------------------------------------
 RELEASE=$(lsb_release -cs)
 #  ---------------------------------------------------------
@@ -26,7 +24,7 @@ return 1
 }
 #  ----------------------------------------
 function installOther(){
-cho -e $LINE "\nInstall git ... "
+echo -e $LINE "\nInstall git ... "
 [[ $(dpkg --get-selections git) ]] && echo "Git Already installed" || apt-get install -y git
 echo 'Install davfs2 ... '
 [[ $(dpkg --get-selections davfs2) ]] && echo "davfs2 installed" || apt-get -y install davfs2
@@ -36,7 +34,7 @@ return 1
 }
 #  ----------------------------------
 function installDocker(){
-cho -e $LINE "\nInstall docker ... "
+echo -e $LINE "\nInstall docker ... "
 [[ $(dpkg --get-selections docker-ce) ]] && { echo "Already installed";  return 1;}
 apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
@@ -52,17 +50,13 @@ echo 'Final issues ... '
 return 1
 }
 #  ---------------------------------------------------------
-appUsables=(ufw docker other ending)
+appUsables=(installFirewall installOther installDocker finalissues)
 apt-get -y update
+echo -e "\n Update server & install package ...\n"
 for app in ${appUsables[*]} ; do
-case  $app  in
-    ufw) installFirewall ;;
-    other) installOther ;;
-    docker) installDocker ;;
-    ending) finalissues ;;
-    *) echo 'Unable to install [ '$app' ]. Attempt: sudo apt-get install '$app;;
-esac
-done
-echo -e "\nAll done! "
+    $app
+    done
+echo -e $LINE"\n>  Server already uptated\n"$LINE
+read -n 1 -s -r -p "Press any key to continue > "
 #
 exit 0
