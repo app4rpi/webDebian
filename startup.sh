@@ -3,8 +3,9 @@
 # chmod +x ./startup.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
+source ./context.sh
 LINE="-----------------------------------------------"
-lineOrder="${@,,}"
+lineOrder="${@}"
 #  ----------------------------------
 function isCorrect(){
 while true; do  read -r -p "Are all correct & continue? [Y/n] " input
@@ -39,7 +40,6 @@ echo -e '# '$LINE$LINE
 #
 MAINIP4=$IP4
 [[ ${lineOrder} = *"noip"* ]] && { MAINIP4=""; lineOrder=${lineOrder//'noip'/}; }
-MAINIP4=""
 echo -n 'Main IP: '
 [[ -z "$MAINIP4" ]] && echo -e "<none>" || echo -e $MAINIP4
 [[ ${lineOrder} = *"errorlocal"* ]] && { ERRORLOCAL=true; lineOrder=${lineOrder//'errorlocal'/}; } || ERRORLOCAL=false
@@ -87,13 +87,16 @@ temp3="export mainColor="$MAINCOLOR
 echo $temp3
 #
 echo "# SubDomains data>"
+MAINIP4=""
 tempSub=( ${SUBDOMAINS} )
 declare -a  SUBDOMAINS
+temp='"('$MAINDOMAIN" '"$MAINIP4"' html "mainSite" "$MAINCOLOR')"'
+echo $temp
 for ((i=0; i<${#tempSub[@]}; i++))
 	do
 	temp='"('${tempSub[i]}.$MAINDOMAIN" '"$MAINIP4"' "${tempSub[i]}" "${tempSub[i]}Site" "${colors[$random+$i+1]}" "mainSite')"'
-	SUBDOMAINS+=("$temp") 
 	echo $temp
+	SUBDOMAINS+=("$temp") 
 	done
 echo -e '# '$LINE$LINE
 #
