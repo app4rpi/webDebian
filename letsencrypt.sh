@@ -7,9 +7,10 @@ if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 LINE="---------------------------------------"
 lineOrder="${@} "
 #  ---------------------------------------------------------
-clear
-echo -e "\nStart install & config SSL Letsencrypt for a Nginx Docker server."
+echo
 echo $LINE$LINE
+echo -e "\nStart install & config SSL Letsencrypt for a Nginx Docker server."
+echo $LINE
 #  ---------------------------------------------------------
 function isContinue(){
 echo
@@ -23,26 +24,23 @@ done
 return 1
 }
 #  ---------------------------------------------------------
-# si existeixen certificats, acabar i sortir
-if [[ -d /etc/letsencrypt/live ]]; then
-	echo -e "\nLetsEncrypt certificates already configured\n"$LINE
-	read -n 1 -s -r -p "Press any key to continue > "
-	exit 0
-	fi
 [[ ! -f ./certbot-auto ]] &&  { wget https://dl.eff.org/certbot-auto -P ./; chmod +x ./certbot-auto; }
 [[ ! -f ./letsencrypt-auto ]] && { wget https://github.com/certbot/certbot/raw/master/letsencrypt-auto -P ./; chmod +x ./letsencrypt-auto; }
-echo $lineOrder
+if [[ -d /etc/letsencrypt/live ]]; then
+	echo -e "\nLetsEncrypt certificates already configured\n\n"$LINE
+	exit 0
+	fi
 [[ ${lineOrder} = *"email="* ]] && { email=${lineOrder//*email=/};email=${email// */}; } || email=''
 echo 'email  : '$email
 [[ ${lineOrder} = *"domains="* ]] && { domains=${lineOrder//*domains=[\{|\[]/};domains=${domains//[\}|\]]*/}; } || domains=''
+domainList=${domains//,/ };domains=${domains//  / };
 domains=${domains//,/ };domains=${domains//  / };
 domains=${domains// /, };
 echo 'Domains: '${domains[@]}
+echo -en "Config SSL domains:"; [[ ${lineOrder} = *"sslon"* ]] && echo 'ssl ON' || echo 'ssl OFF'
 echo $LINE$LINE
 if [[ ! ${domains[@]} ]]; then
-    echo -e "   >  Error: No domains declared ..."
-    echo $LINE$LINE
-    echo
+    echo -e "   >  Error: No domains declared ...\n"$LINE$LINE"\n\t"
     read -n 1 -s -r -p "  Press any key to continue > "
     echo
     exit 0
@@ -59,12 +57,23 @@ echo $LINE$LINE
 echo -e "\nStarting install LetsEncrypt certificate ..."
 isContinue
 #echo -e $content > $file
-echo $LINE
+echo $LINE$LINE
 #./letsencrypt-auto certonly --standalone
 ./certbot-auto certonly --standalone
-echo $LINE$LINE
 echo
+if [[ -d /etc/letsencrypt/live ]]; then
+temp='export SSL="letsencrypt"'
+echo $temp
+sed -ie "s/^export SSL=.*$/$temp/g" context.sh
+temp='export SSLemail="'${email}'"'
+echo $temp
+sed -ie "s/^export SSLemail=.*$/$temp/g" context.sh
+temp='export SSLdomains="'$domainList'"'
+echo $temp
+sed -ie "s/^export SSLdomains.*$/$temp/g" context.sh
+fi
 [[ ${lineOrder} = *"sslon"* ]] && ./sslConfig.sh || echo 'ssl not configured on domains'
-read -n 1 -s -r -p "  Press any key to continue > "
+echo -en "\n\t"
+read -n 1 -s -r -p "Press any key to continue > "
 echo
 exit 1
