@@ -18,8 +18,11 @@ done
 return 1
 }
 #  ----------------------------------
-function finalissues(){
-echo -e 'Final issues ... '
+function initialIssues(){ '
+return 1
+}
+#  ----------------------------------
+function finalIssues(){ '
 return 1
 }
 #  ----------------------------------
@@ -103,6 +106,7 @@ echo -e '# '$LINE$LINE
 #Confirma
 isCorrect
 #
+sed -ie "s/^export RELEASE.*$/export RELEASE=$(lsb_release -cs)/g" $file
 sed -ie "s/^export mainDomain.*$/${temp1}/g" $file
 sed -ie "s/^export mainIP.*$/${temp2}/g" $file
 sed -ie "s/^export mainColor.*$/${temp3}/g" $file
@@ -115,7 +119,7 @@ for ((i=0; i<${#SUBDOMAINS[@]}; i++))
 	done
 sed -ie "s/^export verifiedContext.*$/export verifiedContext=true/g" $file
 sed -ie "s/^errorStyleLocal.*$/export errorStyleLocal=${ERRORLOCAL}/g" $file
-echo "Saved data"
+echo -e "\nSaved data\n"
 return 1
 }
 #  ----------------------------------
@@ -127,5 +131,4 @@ ERRORLOCAL=false
 clear
 initialissues
 configContext
-finalissues
 exit
