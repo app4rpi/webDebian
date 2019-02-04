@@ -30,6 +30,8 @@ export context=("(domain IP workDir nameSite colorSite subDirIn)"
 ) 
 #
 export SSL="''"
-export domainSSL=()
+export SSLemail=""
+export SSLdomains=""
+export DAVconfig=""
 export verifiedContext=false
 export folderCreated=false
