@@ -18,7 +18,7 @@ echo -e "Web dir      = [ "$webDir" ]"
 echo -e "Container    = [ "$containerName" ]\n"$LINE
 if [[ -z $(docker images -q $dockerImage) ]]; then
     echo -e "\tDocker image does not exist.\n\tDownload image from DockerHub...\n"
-    docker push $dockerImage
+    docker pull $dockerImage
     [[ -z $(docker images -q $dockerImage) ]] && { echo -e "\n\tUnavailable docker image. Trial start docker finished.\n\tUse maintenance options to start docker nginx image"; exit 0;}
 fi
 echo -e "\n[ "$dockerImage" ]  already downloaded ... "
