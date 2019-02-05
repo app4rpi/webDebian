@@ -233,7 +233,7 @@ else
         echo
         echo -e "\n"$LINE$LINE"\nDefine backup parameters:\n(dav & user & pw needed):\n"$LINE 
         echo -e "    dav=<davServer> user=<davUser> pw=<davPw> [dir=<dir2backup>]"
-        echo -e"\n    (defaul dir or empty option is nameServer)"
+        echo -e "\n    (defaul dir or empty option is nameServer)"
         echo -e "    [x]  Continue without backup config\n"$LINE$LINE 
         read -p "   > " lineOrder
         [[ $lineOrder =~ ^(x|X|c|C) ]] && break
