@@ -47,8 +47,7 @@ errorTextCat=("El codi d'error 4xx sol indicar casos en qu&egrave; el client sem
 [[ ! -d ${errorDir} ]] && mkdir -p ${errorDir}
 echo -n '['${errorDir}'/] :'
 [[ ${errorStyleLocal} = true ]] && errorCss='css' || errorCss='/error'
-for ((i=0; i<${#errorNum[@]}; i++))
-do
+for ((i=0; i<${#errorNum[@]}; i++)); do
 mainPage='<!DOCTYPE html>\n<html lang="es-ES">\n<head>\n<meta charset="utf-8" />\n
 <title>Error '${errorNum[i]}'</title>\n<link type="text/css" rel="stylesheet" href="'${errorCss}'/error.css" /></head>'
 mainPage+='<body>\n<article><div id="one"><div id="dia" class="number">'${errorNum[i]}'</div>\n
@@ -76,7 +75,7 @@ if [[ $errorStyleLocal = true ]]; then
         block=(${block:1:-1})
         errorCSS ${wwwFolder}/${data[2]}/css ${data[4]:1:-1}
         echo -n ' '${data[2]}'/css'
-    done
+        done
 fi
 echo
 return
@@ -114,8 +113,7 @@ for ((i=1; i<${#context[@]}; i++)); do
     echo -e $thisSite > ${wwwFolder}/${data[2]}/index.html
     cat ${wwwFolder}/${data[2]}/index.html
     echo "# ----------------------------"
-done
-
+    done
 return 1
 }
 #  ---------------------------------------------------------
@@ -140,6 +138,7 @@ for ((i=1; i<${#context[@]}; i++)); do
     cat ${appFolder}/${data[3]}.conf
     echo "# ----------------------------"
 done
+return
 }
 #  ----------------------------------
 function finalissues(){
@@ -150,16 +149,16 @@ return 1
 #
 appUsables=(init web domain include error ending)
 for app in ${appUsables[*]} ; do
-case  $app  in
-    init) initialissues ;;
-    error) errorFiles ;;
-    web) configWeb ;;
-    domain) domainConfig ;;
-    include) includeFolder ;;
-    ending) finalissues ;;
-    *) echo 'Unable to install [ '$app' ]. Attempt: apt-get install '$app;;
-esac
-done
+    case  $app  in
+        init) initialissues ;;
+        error) errorFiles ;;
+        web) configWeb ;;
+        domain) domainConfig ;;
+        include) includeFolder ;;
+        ending) finalissues ;;
+        *) echo 'Unable to install [ '$app' ]. Attempt: apt-get install '$app;;
+        esac
+    done
 echo -e "\nAll done! "
 #
 exit 0
