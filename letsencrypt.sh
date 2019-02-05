@@ -16,10 +16,10 @@ function isContinue(){
 echo
 echo -n "[x] Cancel & break     [c] Continue   > "
 while true; do  read -rsn1  input
-  case $input in 
+   case $input in 
 	[cC]) { echo;break;} ;;
 	[xX]) { echo;exit 0;} ;; 
- esac
+ 	esac
 done
 return 1
 }
@@ -27,9 +27,10 @@ return 1
 [[ ! -f ./certbot-auto ]] &&  { wget https://dl.eff.org/certbot-auto -P ./; chmod +x ./certbot-auto; }
 [[ ! -f ./letsencrypt-auto ]] && { wget https://github.com/certbot/certbot/raw/master/letsencrypt-auto -P ./; chmod +x ./letsencrypt-auto; }
 if [[ -d /etc/letsencrypt/live ]]; then
-	echo -e "\nLetsEncrypt certificates already configured\n\n"$LINE
-	exit 0
-	fi
+    echo -e "\nLetsEncrypt certificates already configured\n\n"$LINE
+    read -rsn1 -p "Press any key to continue > "
+    exit 0
+fi
 [[ ${lineOrder} = *"email="* ]] && { email=${lineOrder//*email=/};email=${email// */}; } || email=''
 echo 'email  : '$email
 [[ ${lineOrder} = *"domains="* ]] && { domains=${lineOrder//*domains=[\{|\[]/};domains=${domains//[\}|\]]*/}; } || domains=''
@@ -41,7 +42,7 @@ echo -en "Config SSL domains:"; [[ ${lineOrder} = *"sslon"* ]] && echo 'ssl ON' 
 echo $LINE$LINE
 if [[ ! ${domains[@]} ]]; then
     echo -e "   >  Error: No domains declared ...\n"$LINE$LINE"\n\t"
-    read -n 1 -s -r -p "  Press any key to continue > "
+    read -rsn1 -p "  Press any key to continue > "
     echo
     exit 0
 fi
@@ -62,18 +63,18 @@ echo $LINE$LINE
 ./certbot-auto certonly --standalone
 echo
 if [[ -d /etc/letsencrypt/live ]]; then
-temp='export SSL="letsencrypt"'
-echo $temp
-sed -ie "s/^export SSL=.*$/$temp/g" context.sh
-temp='export SSLemail="'${email}'"'
-echo $temp
-sed -ie "s/^export SSLemail=.*$/$temp/g" context.sh
-temp='export SSLdomains="'$domainList'"'
-echo $temp
-sed -ie "s/^export SSLdomains.*$/$temp/g" context.sh
+    temp='export SSL="letsencrypt"'
+    echo $temp
+    sed -ie "s/^export SSL=.*$/$temp/g" context.sh
+    temp='export SSLemail="'${email}'"'
+    echo $temp
+    sed -ie "s/^export SSLemail=.*$/$temp/g" context.sh
+    temp='export SSLdomains="'$domainList'"'
+    echo $temp
+    sed -ie "s/^export SSLdomains.*$/$temp/g" context.sh
 fi
 [[ ${lineOrder} = *"sslon"* ]] && ./sslConfig.sh || echo 'ssl not configured on domains'
 echo -en "\n\t"
-read -n 1 -s -r -p "Press any key to continue > "
+read -rsn1 -p "Press any key to continue > "
 echo
 exit 1
