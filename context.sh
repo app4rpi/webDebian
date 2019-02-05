@@ -21,7 +21,7 @@ export context=("(domain IP workDir nameSite colorSite subDirIn)"
 ) 
 #
 export dockerImage="app2linux/nginx2ssl:latest"
-export SSL="''"
+export SSL=""
 export SSLemail=""
 export SSLdomains=""
 export DAVconfig=""
