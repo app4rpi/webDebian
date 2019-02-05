@@ -21,8 +21,7 @@ echo $LINE$LINE
 [[ ! $dir ]] && dir=$mainDomain
 if [[ ! $webDav || ! $user || ! $pw || ! $dir ]]; then
     echo -e "   >  Incorrect mandatory parameters"
-    echo $LINE$LINE
-    echo
+    echo -e $LINE$LINE"\n\t"
     read -n 1 -s -r -p "  Press any key to continue > "
     echo
     exit 0
@@ -49,6 +48,8 @@ sed -ie "0,/^\/mnt\//{s/^\/mnt\//#\/mnt\//}" /etc/davfs2/secrets
 sed -ie "0,/^https:/{s/^https:/#https:/}" /etc/fstab
 echo $POINT $user $pw >> /etc/davfs2/secrets
 echo $webDav $POINT davfs rw,user,uid=root,noauto 0 0 >> /etc/fstab
+temp='export DAVconfig="'$webDav' '"$POINT"' '$user' '$pw'"'
+sed -ie "s|^export DAVconfig.*$|${temp}|g" context.sh
 [[ ! -d ${POINT} ]] && mkdir ${POINT}
 #
 if [[ ! -f syncDav.sh ]]; then
