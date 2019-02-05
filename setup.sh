@@ -77,7 +77,7 @@ echo "# -----------"
 # setup server
 ./setupServer.sh
 echo -e $LINE"\n\n>  Server already uptated\n"$LINE
-read -n 1 -s -r -p "Press any key to continue > "
+read -rsn1 -p "Press any key to continue > "
 #  ---------------------------------------------------------
 # startup: define context web
 clear
@@ -350,7 +350,7 @@ else
         [[ "${valor}" == 1 ]] && break
         done
     echo -e "\n"$LINE$LINE
-    echo -en "\t"; read -n 1 -s -r -p "Press any key to continue  > "
+    echo -en "\t"; read -rsn1 -p "Press any key to continue  > "
     fi
 echo
 return
