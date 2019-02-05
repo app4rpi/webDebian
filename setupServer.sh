@@ -57,6 +57,6 @@ for app in ${appUsables[*]} ; do
     $app
     done
 echo -e $LINE"\n>  Server already uptated\n"$LINE
-read -n 1 -s -r -p "Press any key to continue > "
+read -rsn1 -p "Press any key to continue > "
 #
 exit 0
