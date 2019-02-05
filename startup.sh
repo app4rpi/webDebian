@@ -9,20 +9,12 @@ lineOrder="${@}"
 #  ----------------------------------
 function isCorrect(){
 while true; do  read -r -p "Are all correct & continue? [Y/n] " input
-  case $input in 
-	[yY][eE][sS]|[sS][iI]|[yYsS]) break ;;
-	[nN][oO]|[nN]) exit 0 ;; 
-  	*) echo -n  "Invalid input...  ->   " ;;
- esac
-done
-return 1
-}
-#  ----------------------------------
-function initialIssues(){ '
-return 1
-}
-#  ----------------------------------
-function finalIssues(){ '
+    case $input in 
+        [yY][eE][sS]|[sS][iI]|[yYsS]) break ;;
+        [nN][oO]|[nN]) exit 0 ;; 
+        *) echo -n  "Invalid input...  ->   " ;;
+        esac
+    done
 return 1
 }
 #  ----------------------------------
@@ -52,9 +44,9 @@ if [[ ${lineOrder} = *"."* ]]; then
 	domain=$dom.$ext
 	lineOrder=${lineOrder//$domain/}
 	[[ -z $dom || -z $ext ]] && { MAINDOMAIN=""; lineOrder=''; } || MAINDOMAIN=$domain
-   else
+else
 	MAINDOMAIN=""
-   fi
+fi
 echo -n 'Main domain: '
 [[ -z "$MAINDOMAIN" ]] && echo -e "<none>" || echo -e $MAINDOMAIN
 echo -en 'Subdomains: ' 
@@ -63,7 +55,7 @@ echo -en "Error page style [error.css]: "
 if [[ $ERRORLOCAL = true ]]; then
 	echo "Configurable style for each domain in the local directory './css'"
 	lineOrder=( ${lineOrder[@]//"errorlocal"/} )
-	else
+else
 	echo "Unique style for all domains and subdomains in '/error/' directory"
 fi
 echo -e '# '$LINE$LINE
@@ -94,9 +86,9 @@ MAINIP4=""
 tempSub=( ${SUBDOMAINS} )
 declare -a  SUBDOMAINS
 temp='"('$MAINDOMAIN" '"$MAINIP4"' html "mainSite" "$MAINCOLOR')"'
+SUBDOMAINS+=("$temp") 
 echo $temp
-for ((i=0; i<${#tempSub[@]}; i++))
-	do
+for ((i=0; i<${#tempSub[@]}; i++));	do
 	temp='"('${tempSub[i]}.$MAINDOMAIN" '"$MAINIP4"' "${tempSub[i]}" "${tempSub[i]}Site" "${colors[$random+$i+1]}" "mainSite')"'
 	echo $temp
 	SUBDOMAINS+=("$temp") 
@@ -113,9 +105,8 @@ sed -ie "s/^export mainColor.*$/${temp3}/g" $file
 [[ -n "$MAINDOMAIN" ]] && sed -ie "s/(''/($MAINDOMAIN/g" $file
 [[ -n "$MAINIP4" ]] && sed -ie "s/'' html/'$MAINIP4' html/g" $file
 sed -ie "s/'')/$MAINCOLOR)/g" $file
-for ((i=0; i<${#SUBDOMAINS[@]}; i++))
-	do
-	sed -i -e '0,/^"()"/{s/^"()"/'"${SUBDOMAINS[i]}"'/}' $file
+for ((i=0; i<${#SUBDOMAINS[@]}; i++)); do
+    sed -i "/^)/i${SUBDOMAINS[i]}" $file
 	done
 sed -ie "s/^export verifiedContext.*$/export verifiedContext=true/g" $file
 sed -ie "s/^errorStyleLocal.*$/export errorStyleLocal=${ERRORLOCAL}/g" $file
