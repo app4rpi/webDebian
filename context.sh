@@ -18,15 +18,6 @@ export errorStyleLocal=false
 color=('#DC443A' '#98243A' '#11589F' '#715138' '#D69C2F' '#616247' '#898E88' '#2e5090' '#5F4B8B' '#BA0020' '#0E3A53' '#DC443A' '#98243A' '#11589F' '#715138' '#D69C2F' '#616247' '#898E88' '#2e5090' '#5F4B8B')
 #
 export context=("(domain IP workDir nameSite colorSite subDirIn)"
-"('' '' html mainSite '')"
-"()"
-"()"
-"()"
-"()"
-"()"
-"()"
-"()"
-"()"
 ) 
 #
 export dockerImage="app2linux/nginx2ssl:latest"
