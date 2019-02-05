@@ -10,7 +10,6 @@ dockerImage=$(sed -e '/^export dockerImage/ !d' context.sh); dockerImage=(${dock
 nginxDir=$(sed -e '/^export appFolder/ !d' context.sh); nginxDir=(${nginxDir:18:-1})
 webDir=$(sed -e '/^export wwwFolder/ !d' context.sh); webDir=(${webDir:18:-1})
 containerName="nginx"
-
 [[ -z "$dockerImage" ]] && { echo -e "\n\tDocker image not specified. \n\n\tReview the configuration.\n\tUse the maintenance options to launch the Nginx docker image."; exit 0; }
 echo -e "Docker image = [ "$dockerImage" ]"
 echo -e "Config dir   = [ "$nginxDir" ]"
@@ -28,5 +27,4 @@ if [[ -n "$(docker ps -q -f status=running -f name=^/${containerName}$)" ]]; the
 fi
 echo -e "\tStarting container [ ${containerName} ] ..."
 docker run -d --restart always --net=host -v ${webDir}:/var/www/ -v ${nginxDir}:/etc/nginx/conf.d/ --name ${containerName} ${dockerImage}
-#docker run -d --restart always --net=host -v /var/www:/var/www/ -v /app/nginx:/etc/nginx/conf.d/ --name nginx app2linux/nginx2ssl:latest
 exit
