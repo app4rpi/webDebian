@@ -22,7 +22,7 @@ echo $LINE$LINE
 if [[ ! $webDav || ! $user || ! $pw || ! $dir ]]; then
     echo -e "   >  Incorrect mandatory parameters"
     echo -e $LINE$LINE"\n\t"
-    read -n 1 -s -r -p "  Press any key to continue > "
+    read -rsn1 -p "  Press any key to continue > "
     echo
     exit 0
 fi
@@ -39,7 +39,7 @@ if ! ping -c 1 -W 1 "$hostDav"; then
     echo -e "   >  Server <$hostDav> not available.\n      Select another cloud service for the backup"
     echo $LINE$LINE
     echo
-    read -n 1 -s -r -p "  Press any key to continue > "
+    read -rsn1 -p "  Press any key to continue > "
     echo
     exit 0
 fi
