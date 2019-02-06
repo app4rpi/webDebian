@@ -251,6 +251,7 @@ return
 #  ---------------------------------------------------------
 # Start nginx server
 function startNginx(){
+[[  -n "$(docker ps -q -f status=running -f name=^/nginx$)" ]] && { echo -e "\n"$LINE$LINE"\n\tDocker container already running.\n"$LINE$LINE; return; }
 clear
 echo -e '\nStart docker nginx server\n'$LINE
 ./nginxStart.sh
