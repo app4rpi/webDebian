@@ -4,8 +4,6 @@
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 LINE="-------------------------------------------------------"
-#lineOrder="${@,,}"
-#
 #  ---------------------------------------------------------
 function loadBashFiles(){
 file=(start.sh startup.sh setupServer.sh context.sh nginxConfig.sh syncDav.sh)
@@ -173,7 +171,7 @@ for ((i=1; i<${#context[@]}; i++));  do
 echo
 done
 echo $LINE$LINE
-echo -en "\t"; read -n1 -r -p "Press key to continue -> " key
+echo -en "\t"; read -rsn1 -p "Press key to continue -> " key
 return 1
 }
 
