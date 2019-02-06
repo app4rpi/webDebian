@@ -65,13 +65,13 @@ echo
 if [[ -d /etc/letsencrypt/live ]]; then
     temp='export SSL="letsencrypt"'
     echo $temp
-    sed -ie "s/^export SSL=.*$/$temp/g" context.sh
+    sed -Ei "s/^export SSL=.*$/$temp/g" context.sh
     temp='export SSLemail="'${email}'"'
     echo $temp
-    sed -ie "s/^export SSLemail=.*$/$temp/g" context.sh
+    sed -Ei "s/^export SSLemail=.*$/$temp/g" context.sh
     temp='export SSLdomains="'$domainList'"'
     echo $temp
-    sed -ie "s/^export SSLdomains.*$/$temp/g" context.sh
+    sed -Ei "s/^export SSLdomains.*$/$temp/g" context.sh
 fi
 [[ ${lineOrder} = *"sslon"* ]] && ./sslConfig.sh || echo 'ssl not configured on domains'
 echo -en "\n\t"
