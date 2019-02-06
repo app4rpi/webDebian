@@ -4,9 +4,7 @@
 # wget https://raw.githubusercontent.com/app2linux/webDebian/master/setup.sh
 #  ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-#  ---------------------------------------------------------
 LINE="---------------------------------------"
-lineOrder="${@,,} "
 #  ---------------------------------------------------------
 function isContinue(){
 echo -n "[x] Cancel & break     [c] Continue   > "
