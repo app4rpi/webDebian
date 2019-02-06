@@ -19,13 +19,11 @@ return 1
 # --------------------------------------------------------------------------
 function initialIssues(){
 echo -e 'Initial issues ... '
-cd .startup
 return 1
 }
 #  ----------------------------------
 function finalIssues(){
 echo -e '\nFinal issues ... '
-cd ..
 return 1
 }
 # --------------------------------------------------------------------------
@@ -45,7 +43,7 @@ for ((i=0; i<${#file[@]}; i++)); do
 echo
 echo $LINE$LINE
 echo -e  "\n\tExit now & restart bash script file \n"
-echo -en "\t"; read -n1 -r -p "Press key to continue -> " key
+echo -en "\t"; read -rsn1 -p "Press key to continue -> " key
 echo
 exit
 }
@@ -58,7 +56,7 @@ isCorrect; val=$?;
 mv ./context.sh ./context.old
 [[ -f context.bak ]] && cp ./context.bak ./context.sh || { wget https://raw.githubusercontent.com/app2linux/webDebian/master/context.sh -P ./; chmod +x ./context.sh; }
 echo -e "\tFile <context.sh> restored."
-echo -en "\t"; read -n1 -r -p "Press key to continue -> " key
+echo -en "\t"; read -rsn1 -p "Press key to continue -> " key
 return 1
 }
 #  ----------------------------------
@@ -82,7 +80,7 @@ for ((i=1; i<${#context[@]}; i++));  do
 echo
 done
 echo $LINE$LINE
-echo -en "\t"; read -n1 -r -p "Press key to continue -> " key
+echo -en "\t"; read -rsn1 -p "Press key to continue -> " key
 return 1
 }
 
@@ -96,7 +94,7 @@ while true; do
     echo -e "  4. Modify domains & subdomains"
     echo -e "  4. Delete domains & subdomains"
     echo -e "  x. Exit\n"$LINE
-    echo -en "\t"; read -n1 -r -p "Enter choice -> " key
+    echo -en "\t"; read -rsn1 -p "Enter choice -> " key
     case $key in
         1) viewContext ;;
         2) restartContext ;;
@@ -113,7 +111,7 @@ while true; do
     echo -e "  1. Update bash script config files"
     echo -e "  2. Update server & install uninstalled packages"
     echo -e "  x. Exit\n"$LINE
-    echo -en "\t"; read -n1 -r -p "Enter choice -> " key
+    echo -en "\t"; read -rsn1 -p "Enter choice -> " key
     case $key in
         1) downloadGit ;;
         2) ./setupServer.sh ;;
@@ -133,7 +131,7 @@ while true; do
     echo -e "  2. Update web server config"
     echo -e "  4. Create web server files & folders structure"
     echo -e "  x. Exit\n"$LINE
-    echo -en "\t"; read -n1 -r -p "Enter choice -> " key
+    echo -en "\t"; read -rsn1 -p "Enter choice -> " key
     case $key in
         1) updateServer ;;
         2) updateWeb ;;
