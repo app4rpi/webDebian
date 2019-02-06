@@ -98,18 +98,15 @@ echo -e '# '$LINE$LINE
 #Confirma
 isCorrect
 #
-sed -ie "s/^export RELEASE.*$/export RELEASE=$(lsb_release -cs)/g" $file
-sed -ie "s/^export mainDomain.*$/${temp1}/g" $file
-sed -ie "s/^export mainIP.*$/${temp2}/g" $file
-sed -ie "s/^export mainColor.*$/${temp3}/g" $file
-#[[ -n "$MAINDOMAIN" ]] && sed -ie "s/(''/($MAINDOMAIN/g" $file
-#[[ -n "$MAINIP4" ]] && sed -ie "s/'' html/'$MAINIP4' html/g" $file
-#sed -ie "s/'')/$MAINCOLOR)/g" $file
+sed -Ei "s/^export RELEASE.*$/export RELEASE=$(lsb_release -cs)/g" $file
+sed -Ei "s/^export mainDomain.*$/${temp1}/g" $file
+sed -Ei "s/^export mainIP.*$/${temp2}/g" $file
+sed -Ei "s/^export mainColor.*$/${temp3}/g" $file
 for ((i=0; i<${#SUBDOMAINS[@]}; i++)); do
     sed -i "/^)/i${SUBDOMAINS[i]}" $file
     done
-sed -ie "s/^export verifiedContext.*$/export verifiedContext=true/g" $file
-sed -ie "s/^errorStyleLocal.*$/export errorStyleLocal=${ERRORLOCAL}/g" $file
+sed -Ei "s/^export verifiedContext.*$/export verifiedContext=true/g" $file
+sed -Ei "s/^errorStyleLocal.*$/export errorStyleLocal=${ERRORLOCAL}/g" $file
 echo -e "\nSaved data\n"
 return 1
 }
