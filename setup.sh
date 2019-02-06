@@ -125,7 +125,7 @@ return
 function updateSourcelist(){
 file='/etc/apt/sources.list'
 echo -e 'File to update : '$file
-[[ -f $file.old ]] && { echo -e "\n<sources.list> already updated.\n"$LINE$LINE; return; }
+[[ -f $file.old ]] && { echo -e "\n\t<sources.list> already updated.\n"$LINE$LINE; return; }
 [[ -f $file && ! -f $file.old ]] && mv $file $file.old
 cat <<EOF  > $file
 deb http://ftp.debian.org/debian/ $(lsb_release -cs) main contrib non-free
