@@ -5,95 +5,6 @@
 if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
 LINE="-------------------------------------------------------"
 #  ---------------------------------------------------------
-function loadBashFiles(){
-file=(start.sh startup.sh setupServer.sh context.sh nginxConfig.sh syncDav.sh)
-echo -en 'Create the <./startup> directory for the shell files and copy git files  : '
-[ ! "$(ls -A ./startup)" ] && mkdir -p ./startup 
-for ((i=0; i<${#file[@]}; i++))
-do
-echo -n '<'${file[i]}'> : '
-    [[ -f ./startup/ ]] && continue
-    [[ -f ./startup/${file[i]} ]] && continue
-    wget https://raw.githubusercontent.com/app2linux/webDebian/master/${file[i]} -P ./startup
-    chmod +x ./startup/${file[i]}
-    done
-echo
-[ ! "$(ls -A ./startup)" ] && rmdir ./startup
-return 1
-}
-# --------------------------------------------------------------------------
-displayMenu() {
- clear
- echo -e $LINE
- echo -e "       Options       "
- echo -e $LINE 
- echo -e "  1. Update <StartUp> files"
- echo -e "  2. Update server & install ufw firewall, git, Docker,..."
- echo -e "  3. Prepare web server context"
- echo -e "  4. Create web server files & folders structure"
- echo -e "  x. Exit"
- echo -e $LINE 
-}
-#  ----------------------------------
-readOptions(){
- local choice
-echo -en "\t"
- read -p "Enter choice -> " choice
-#read -n1 -r -p "Press any key to continue..." key
-
- case $choice in
- 1) updateStartUp ;;
- 2) setupServer ;;
- 3) prepareContext ;;
- 4) createStructure ;;
- x) exit 0;;
- *) echo -e "${RED}Error...${STD}" && sleep 2
- esac
-}
-# --------------------------------------------------------------------------
-function finalissues(){
-echo -e 'Final issues ... '
-return 1
-}
-#  ----------------------------------
-function initialissues(){
-[[ ! -d ./startup ]] && { echo "<./startup> directory is unable"; exit; }
-echo -e 'Initial issues ... '
-return 1
-}
-#  ----------------------------------
-function setupServer(){
-echo
-echo $LINE$LINE
-echo
-echo $LINE$LINE
-read -n1 -r -p "Press any key to continue (x to cancel)..." key
-cd startup
-./setupServer.sh
-cd ..
-read -n1 -r -p "Press any key to continue ..." key
-return 1
-}
-#  ----------------------------------
-function createStructure(){
-echo
-echo $LINE$LINE
-echo
-echo $LINE$LINE
-read -n1 -r -p "Press any key to continue (x to cancel)..." key
-cd startup
-./nginxConfig.sh
-cd ..
-read -n1 -r -p "Press any key to continue ..." key
-
-return 1
-#!/bin/bash
-# This script has been tested on Debian 8 Jessie image
-# chmod +x ./start.sh
-#  ---------------------------------------------------------
-if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-LINE="-------------------------------------------------------"
-#  ---------------------------------------------------------
 function isCorrect(){
 while true; do  echo -en "\t"
 read -r -p "Are all correct & continue? [Y/n] " input
@@ -171,12 +82,12 @@ for ((i=1; i<${#context[@]}; i++));  do
 echo
 done
 echo $LINE$LINE
-echo -en "\t"; read -rsn1 -p "Press key to continue -> " key
+echo -en "\t"; read -n1 -r -p "Press key to continue -> " key
 return 1
 }
 
 # --------------------------------------------------------------------------
-updateWeb() {
+function updateWeb() {
 while true; do
     echo -e "\n"$LINE"\n\tUpdate web config\n"$LINE 
     echo -e "  1. View <context.sh> config files"
@@ -184,7 +95,6 @@ while true; do
     echo -e "  3. Add main domain & subdomains"
     echo -e "  4. Modify domains & subdomains"
     echo -e "  4. Delete domains & subdomains"
-    echo -e "  4. Update files & folders with <context.sh> config"
     echo -e "  x. Exit\n"$LINE
     echo -en "\t"; read -n1 -r -p "Enter choice -> " key
     case $key in
@@ -197,7 +107,7 @@ while true; do
 return
 }
 #  ----------------------------------
-updateServer() {
+function updateServer() {
 while true; do
     echo -e "\n"$LINE"\n\tUpdate & install options\n"$LINE 
     echo -e "  1. Update bash script config files"
