@@ -44,12 +44,12 @@ if ! ping -c 1 -W 1 "$hostDav"; then
     exit 0
 fi
 #
-sed -ie "0,/^\/mnt\//{s/^\/mnt\//#\/mnt\//}" /etc/davfs2/secrets
-sed -ie "0,/^https:/{s/^https:/#https:/}" /etc/fstab
+sed -Ei "0,/^\/mnt\//{s/^\/mnt\//#\/mnt\//}" /etc/davfs2/secrets
+sed -Ei "0,/^https:/{s/^https:/#https:/}" /etc/fstab
 echo $POINT $user $pw >> /etc/davfs2/secrets
 echo $webDav $POINT davfs rw,user,uid=root,noauto 0 0 >> /etc/fstab
 temp='export DAVconfig="'$webDav' '"$POINT"' '$user' '$pw'"'
-sed -ie "s|^export DAVconfig.*$|${temp}|g" context.sh
+sed -Ei "s|^export DAVconfig.*$|${temp}|g" context.sh
 [[ ! -d ${POINT} ]] && mkdir ${POINT}
 #
 if [[ ! -f syncDav.sh ]]; then
