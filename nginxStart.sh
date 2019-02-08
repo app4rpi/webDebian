@@ -8,7 +8,6 @@ LINE="---------------------------------------"
 echo -e '\nDownload & start Nginx Docker Image: \n'$LINE$LINE
 dockerImage=$(sed -e '/^export dockerNginxImage/ !d' context.sh); dockerImage=(${dockerImage:25:-1})
 containerName=$(sed -e '/^export dockerNginxContainer/ !d' context.sh); containerName=(${containerName:29:-1})
-containerName="nginx"
 nginxDir=$(sed -e '/^export appFolder/ !d' context.sh); nginxDir=(${nginxDir:18:-1})
 webDir=$(sed -e '/^export wwwFolder/ !d' context.sh); webDir=(${webDir:18:-1})
 [[ -z "$dockerImage" ]] && { echo -e "\n\tDocker image not specified. \n\n\tReview the configuration.\n\tUse the maintenance options to launch the Nginx docker image."; exit 0; }
