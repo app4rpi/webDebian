@@ -87,7 +87,7 @@ cd ..
 #  ---------------------------------------------------------
 # Download git files
 function downloadGit(){
-file=(start.sh setupServer.sh startup.sh context.sh nginxConfig.sh setupDav.sh letsencrypt.sh nginxStart.sh sslConfig.sh test.sh)
+file=(start.sh setupServer.sh startup.sh context.sh nginxConfig.sh setupDav.sh letsencrypt.sh nginxStart.sh sslConfig.sh functions.sh test.sh)
 echo -en 'Create the <./startup> directory for the shell files and copy git files (skip if file exist):\n  > ' 
 for ((i=0; i<${#file[@]}; i++)); do
     [[ -f ./ ]] && continue
