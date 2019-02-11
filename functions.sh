@@ -30,7 +30,7 @@ echo -e "\tCopy & overwriting all bash script files except <context.sh>"
 echo -e "\tTo modify <context.sh> erase file first\n"$LINE
 isOk; val=$?;
 [[ $val == 0 ]] && return
-file=(start.sh setupServer.sh startup.sh nginxConfig.sh setupDav.sh letsencrypt.sh nginxStart.sh sslConfig.sh functions.sh test.sh)
+file=(start.sh setupServer.sh startup.sh nginxConfig.sh setupDav.sh letsencrypt.sh nginxStart.sh sslConfig.sh test.sh)
 echo-n "Bash files: "
 for ((i=0; i<${#file[@]}; i++)); do
     echo -n '<'${file[i]}'> : '
@@ -135,7 +135,7 @@ subDomain=${subDomain//.}
 temp='"('${domain}" '' "${subDomain}" "${subDomain}Site" '"${color[$random]}"'"${subSite}')"'
 echo -n ${temp}
 isOk; ok=$?;
-if [ ok ]; then
+if [ $ok ]; then
     sed -i "/^)/i${temp}" context.sh
     addSite ${temp:2:-2}
     addW3 ${temp:2:-2}
@@ -150,7 +150,7 @@ function delDomain(){
 temp=$(sed -e "/^\"(${domain} / !d" context.sh)
 temp=( ${temp:2:-2} )
 isOk; ok=$?;
-if [ ok ]; then
+if [ $ok ]; then
     sed -i "s/\"(${domain} .*$//;/^$/d" context.sh
     rm -f $appFolder/${temp[3]}.conf
     [[ ! ${temp[5]} ]] && rm -rf $wwwFolder/${temp[2]}
@@ -166,9 +166,7 @@ source ./context.sh
 option=$1
 echo
 echo -n ' > '
-[[ $verifiedContext = false ]] && option='all'
-echo -e "\n\n"$LINE$LINE"\n\nDomains:"
-viewDomains
+[[ $verifiedContext = false ]] && option='all' || { echo -e "\n\n"$LINE$LINE"\n\nDomains:"; viewDomains; }
 case $option in
     all) echo -e "\nConfig Main domain:\n"$LINE"\n    [NOIP] [ERRORLOCAL] <nameMainDomain>.<extension> <subdomain> <subdomain> <...>\n" ;;
     add) echo -e "\nAdd domains:\n"$LINE"\n    [<subdomain>]<nameMainDomain>.<extension> ...\n" ;;
@@ -246,7 +244,81 @@ return
 }
 # --------------------------------------------------------------------------
 function verifyConfig(){
+source ./context.sh
 echo -e '\n\n\n'$LINE"\n\tVerify configuration >  "
+echo -e $LINE
+echo -e "Verify <context.sh> files: \n"$LINE
+[[ $verifiedContext = false ]] && { manageDomain all; return; }
+for ((i=1; i<${#context[@]}; i++));  do
+    site=(${context[i]:1:-1})
+    [[ -z $site ]] && break
+    echo -en '[ '${site[3]}' ]  '
+    if [ -f $appFolder/${site[3]}.conf ]; then
+        echo -n "<config file> is OK  -  "
+    else
+        echo -n 'Unavailable config: Create it '
+        isOk; ok=$?;
+        if [ $ok ]; then
+            addSite ${context[i]:1:-1}
+            echo -n " > Added nginx config"
+        else
+            echo -n " > Discarded config"
+        fi
+    fi
+    if [ -d $wwwFolder/${site[2]} ]; then
+        echo "<web dir> is OK "
+    else
+        echo -n 'Unavailable web dir. Create it?  '
+        isOk; ok=$?;
+        if [ $ok ]; then
+            addW3 ${context[i]:1:-1}
+            echo -n " > Added web dir & files"
+        else
+            echo -n " > Discarded"
+        fi
+    fi
+    done
+echo -e '\n'$LINE"\n\nVerify nginx config dir: $appFolder\n"$LINE
+arr=( "${appFolder}"/*.conf )
+for f in "${arr[@]}"; do
+site=${f#"$appFolder"}
+echo -en "[ ${site:1} ]    >  "
+if [[ ${context[@]} == *" ${site:1:-5} "* ]]; then
+echo "Ok! : config site at <context.sh>"
+elif  [[ ${site} == "/default.conf" ]]; then
+echo "Protected config site"
+else
+echo -en "Delete unknown config site"
+        isOk; ok=$?;
+        if [ $ok = 1 ]; then
+rm -f ${f}
+            echo " > Deleted files"
+        else
+            echo " > Discarded"
+        fi
+fi
+done
+echo -e $LINE"\n\nVerify web folder: $wwwFolder\n"$LINE
+arr=( "${wwwFolder}"/**/ )
+for f in "${arr[@]}"; do
+site=${f#"$wwwFolder"}
+echo -en "[ ${site:1:-1} ]    >  "
+if [[ ${context[@]} == *" ${site:1:-1} "* ]]; then
+echo "Ok! : web folder at <context.sh>"
+elif  [[ ${protectetLocations} == *"${f:0:-1}"* ]]; then
+echo "Protected web folder"
+else
+echo -en "Delete orphan www folder"
+        isOk; ok=$?;
+        if [ $ok = 1 ]; then
+rm -rf ${f} 
+            echo " > Deleted files & folder"
+        else
+            echo " > Discarded"
+        fi
+fi
+done
+
 echo -e $LINE
 echo -en "\t"; read -rsn1 -p "Press key to continue -> " key
 return
