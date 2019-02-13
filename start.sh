@@ -20,7 +20,6 @@ function updateWeb() {
 while true; do
     echo -e "\n"$LINE"\n\tUpdate web config\n"$LINE 
     echo -e "  1. View <context.sh> config files"
-    echo -e "  r. Restart <context.sh> config file"
     echo -e "  3. Add domain & config files"
     echo -e "  4. Delete domains & config files"
     echo -e "  7. Verify config files & web structure"
@@ -28,7 +27,6 @@ while true; do
     echo -en "\t"; read -rsn1 -p "Enter choice -> " key
     case $key in
         1) viewContext ;;
-        r|R) restartContext ;;
         3) manageDomain add ;;
         4) manageDomain del ;;
         7) verifyConfig ;;
@@ -43,13 +41,16 @@ while true; do
     echo -e "\n"$LINE"\n\tUpdate & install options\n"$LINE 
     echo -e "  1. Update bash script config files"
     echo -e "  2. Update server & install uninstalled packages"
-    echo -e "  3. Install WebDav backup service"
-    echo -e "  4. Install SSL/TLS certificates"
+    echo -e "  r. Restart <context.sh> config file"
+    echo -e "  5. Config WebDav backup service"
+    echo -e "  9. Install SSL/TLS certificates"
     echo -e "  x. Exit\n"$LINE
     echo -en "\t"; read -rsn1 -p "Enter choice -> " key
     case $key in
         1) downloadGit ;;
         2) ./setupServer.sh ;;
+        r|R) restartContext ;;
+        5) ./configDav.sh ;;
         x) break ;;
         esac
     done
@@ -62,12 +63,14 @@ while true; do
     echo -e "  1. Download Nginx Docker Image"
     echo -e "  2. Status Nginx Docker"
     echo -e "  5. Restart Nginx Docker"
+    echo -e "  9. Backup files & folders"
     echo -e "  x. Exit\n"$LINE
     echo -en "\t"; read -rsn1 -p "Enter choice -> " key
     case $key in
         1) downloadNginx ;;
         2) statusContainer nginx ;;
         5) restartContainer ;;
+        9) ./syncDav.sh ;;
         x) break ;;
         esac
     done
@@ -76,7 +79,7 @@ return
 # --------------------------------------------------------------------------
 # Main menu
 initialIssues
-#    echo -en "\t"; read -rsn1 -p "Enter choice -> " key
+    echo -en "\t"; read -rsn1 -p "Enter choice -> " key
 while true; do
     clear
     echo -e $LINE"\n\tOptions\n"$LINE 
