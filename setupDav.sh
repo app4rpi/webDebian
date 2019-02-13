@@ -66,7 +66,7 @@ if [[ ! -f syncDav.sh ]]; then
     temp+="for DIR in \${DIR2SYNC[*]} ; do\n\t"
     temp+="[[ -d \${DIR} ]] && rsync -urP -var --progress --delete \${DIR} ${POINT}${BACKUPDIR}/ || echo \${DIR} ' not exist!'\n"
     temp+="done\numount ${POINT}\n"
-    temp+='    read -n 1 -s -r -p "  Press any key to continue > '
+    temp+='    read -srn1 -p "  Press any key to continue > "'
     temp+="\nexit\n"
     echo -e $temp >> ./syncDav.sh
     chmod +x ./syncDav.sh
