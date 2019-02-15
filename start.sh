@@ -79,7 +79,6 @@ return
 # --------------------------------------------------------------------------
 # Main menu
 initialIssues
-    echo -en "\t"; read -rsn1 -p "Enter choice -> " key
 while true; do
     clear
     echo -e $LINE"\n\tOptions\n"$LINE 
