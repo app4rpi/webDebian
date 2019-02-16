@@ -11,27 +11,6 @@ echo -n "[x] Cancel & break     [c] Continue   > "
 while true; do  read -rsn1  input
   case $input in 
 	[cC]) break ;;
-	[xX]) { echo;exit 0;} ;; 
- esac
-done
-return 1
-}
-#  ---------------------------------------------------------
-clear 
-echo -e "#\nAutomatic install & config & start server and web server."
-#!/bin/bash
-# This script has been tested on Debian 8 Jessie image
-# chmod +x ./setup.sh
-# wget https://raw.githubusercontent.com/app2linux/webDebian/master/setup.sh
-#  ---------------------------------------------------------
-if [ "$EUID" -ne 0 ]; then echo "Must be root"; exit; fi
-LINE="---------------------------------------"
-#  ---------------------------------------------------------
-function isContinue(){
-echo -n "[x] Cancel & break     [c] Continue   > "
-while true; do  read -rsn1  input
-  case $input in 
-	[cC]) break ;;
 	[xX]) { echo; exit 0;} ;; 
  esac
 done
