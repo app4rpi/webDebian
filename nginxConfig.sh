@@ -161,6 +161,7 @@ for app in ${appUsables[*]} ; do
         *) echo 'Unable to install [ '$app' ]. Attempt: apt-get install '$app;;
         esac
     done
+sed -ie "s/^export folderCreated.*$/export folderCreated=true/g" context.sh
 echo -e "\nAll done! "
 #
 exit 0
