@@ -154,7 +154,6 @@ if $(grep -q folderCreated=true context.sh); then
     echo -e   "    Delete first files & folders: [ "$wwwFolder" | "$appFolder" ]\n"
 else
     ./nginxConfig.sh
-    sed -ie "s/^export folderCreated.*$/export folderCreated=true/g" context.sh
 fi
 echo -e $LINE$LINE 
 echo -en "\t"; read -rsn1 -p "Press a key to continue  >  " key
