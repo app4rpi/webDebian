@@ -72,7 +72,7 @@ for ((i=0; i<${#file[@]}; i++)); do
     [[ -f ./ ]] && continue
     [[ -f ./${file[i]} ]] && continue
     echo -n '<'${file[i]}'> : '
-    wget -q https://raw.githubusercontent.com/app2linux/webDebian/master/${file[i]} -P ./
+    wget -q https://raw.githubusercontent.com/app4rpi/rpiDocker/master/${file[i]} -P ./
     chmod +x ./${file[i]}
     done
 echo
